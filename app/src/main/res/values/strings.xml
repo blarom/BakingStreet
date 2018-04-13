@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">BakingStreet</string>
+    <string name="recipe_image">image</string>
+    <string name="default_text">default</string>
+</resources>
