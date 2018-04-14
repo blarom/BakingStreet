@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+
 public class Recipe implements Parcelable {
 
     public Recipe() {}
@@ -51,16 +53,15 @@ public class Recipe implements Parcelable {
     public void setRecipeName(String name) { this.name = name; }
     public String getRecipeName() { return name; }
 
-    //TODO: Convert to ArrayList for Parcelable
     @SerializedName("ingredients")
-    private Ingredients[] ingredients;
-    public void setIngredients(Ingredients[] ingredients) { this.ingredients = ingredients; }
-    public Ingredients[] getIngredients() { return ingredients; }
+    private ArrayList<Ingredient> ingredients;
+    public void setIngredients(ArrayList<Ingredient> ingredients) { this.ingredients = ingredients; }
+    public ArrayList<Ingredient> getIngredients() { return ingredients; }
 
     @SerializedName("steps")
-    private Steps[] steps;
-    public void setSteps(Steps[] steps) { this.steps = steps; }
-    public Steps[] getSteps() { return steps; }
+    private ArrayList<Step> steps;
+    public void setSteps(ArrayList<Step> steps) { this.steps = steps; }
+    public ArrayList<Step> getSteps() { return steps; }
 
     @SerializedName("servings")
     private int servings;
@@ -73,14 +74,24 @@ public class Recipe implements Parcelable {
     public String getImage() { return image; }
 
 
-    public class Ingredients implements Parcelable {
+    public static class Ingredient implements Parcelable {
 
-        Ingredients() {}
+        Ingredient() {}
 
-        protected Ingredients(Parcel in) {
+        @SerializedName("quantity")
+        private String quantity;
+
+        protected Ingredient(Parcel in) {
             quantity = in.readString();
             measure = in.readString();
             ingredient = in.readString();
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(quantity);
+            dest.writeString(measure);
+            dest.writeString(ingredient);
         }
 
         @Override
@@ -88,27 +99,18 @@ public class Recipe implements Parcelable {
             return 0;
         }
 
-        @Override
-        public void writeToParcel(Parcel parcel, int i) {
-            parcel.writeString(quantity);
-            parcel.writeString(measure);
-            parcel.writeString(ingredient);
-        }
-
-        public final Creator<Ingredients> CREATOR = new Creator<Ingredients>() {
+        public static final Creator<Ingredient> CREATOR = new Creator<Ingredient>() {
             @Override
-            public Ingredients createFromParcel(Parcel in) {
-                return new Ingredients(in);
+            public Ingredient createFromParcel(Parcel in) {
+                return new Ingredient(in);
             }
 
             @Override
-            public Ingredients[] newArray(int size) {
-                return new Ingredients[size];
+            public Ingredient[] newArray(int size) {
+                return new Ingredient[size];
             }
         };
 
-        @SerializedName("quantity")
-        private String quantity;
         public void setQuantity(String quantity) { this.quantity = quantity; }
         public String getQuantity() { return quantity; }
 
@@ -124,11 +126,14 @@ public class Recipe implements Parcelable {
 
     }
 
-    public class Steps implements Parcelable {
+    public static class Step implements Parcelable {
 
-        Steps() {}
+        Step() {}
 
-        protected Steps(Parcel in) {
+        @SerializedName("id")
+        private int id;
+
+        protected Step(Parcel in) {
             id = in.readInt();
             shortDescription = in.readString();
             description = in.readString();
@@ -137,33 +142,31 @@ public class Recipe implements Parcelable {
         }
 
         @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(id);
+            dest.writeString(shortDescription);
+            dest.writeString(description);
+            dest.writeString(videoURL);
+            dest.writeString(thumbnailURL);
+        }
+
+        @Override
         public int describeContents() {
             return 0;
         }
 
-        @Override
-        public void writeToParcel(Parcel parcel, int i) {
-            parcel.writeInt(id);
-            parcel.writeString(shortDescription);
-            parcel.writeString(description);
-            parcel.writeString(videoURL);
-            parcel.writeString(thumbnailURL);
-        }
-
-        public final Creator<Steps> CREATOR = new Creator<Steps>() {
+        public static final Creator<Step> CREATOR = new Creator<Step>() {
             @Override
-            public Steps createFromParcel(Parcel in) {
-                return new Steps(in);
+            public Step createFromParcel(Parcel in) {
+                return new Step(in);
             }
 
             @Override
-            public Steps[] newArray(int size) {
-                return new Steps[size];
+            public Step[] newArray(int size) {
+                return new Step[size];
             }
         };
 
-        @SerializedName("id")
-        private int id;
         public void setStepId(int id) { this.id = id; }
         public int geStepId() { return id; }
 

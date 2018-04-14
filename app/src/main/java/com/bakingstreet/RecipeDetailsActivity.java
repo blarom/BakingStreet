@@ -1,82 +1,81 @@
 package com.bakingstreet;
 
-import android.net.Uri;
-import android.os.Parcelable;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.widget.ImageView;
 
 import com.bakingstreet.data.Constants;
 import com.bakingstreet.data.Recipe;
-import com.bakingstreet.ui.IngredientsRecycleViewAdapter;
-import com.squareup.picasso.Picasso;
+import java.util.ArrayList;
 
-import java.io.File;
-
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class RecipeDetailsActivity extends AppCompatActivity {
+public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDetailsFragment.OnStepSelectedListener {
 
-    private IngredientsRecycleViewAdapter mIngredientsRecycleViewAdapter;
-    @BindView(R.id.recipe_ingredients_recycler_view) RecyclerView mIngredientsRecyclerView;
-    @BindView(R.id.recipe_image) ImageView mRecipeImageView;
-    private Recipe.Ingredients[] mIngredients;
-    private Recipe.Steps[] mSteps;
-    private String mImageString;
+    private Recipe mSelectedRecipe;
+    private ArrayList<Recipe.Ingredient> mSelectedRecipeIngredients;
+    private ArrayList<Recipe.Step> mSelectedRecipeSteps;
     private String mRecipeName;
-    private int mServings;
+    private FragmentManager mFragmentManager;
+    private Recipe.Step mSelectedStep;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_details);
 
+        //Initializations
         ButterKnife.bind(this);
+        mFragmentManager = getSupportFragmentManager();
 
+        //Methods
         getRecipeDetails();
-        setupCollapsingActionBarProperties();
-        showListOfIngredients();
+        setActionBarTitle();
+        activateRecipeDetailsFragment();
     }
-
 
     //Structural methods
-    private void getRecipeDetails() {
-        Recipe selectedRecipe = getIntent().getParcelableExtra(Constants.RECIPE_DETAILS_PARCEL);
-        Parcelable[] selectedRecipeIngredients = getIntent().getParcelableExtra(Constants.RECIPE_INGREDIENTS_PARCEL);
-        Parcelable[] selectedRecipeSteps = getIntent().getParcelableExtra(Constants.RECIPE_STEPS_PARCEL);
-        mImageString = selectedRecipe.getImage();
-        mRecipeName = selectedRecipe.getRecipeName();
-        mServings = selectedRecipe.getServings();
-        mIngredients = (Recipe.Ingredients[]) selectedRecipeIngredients;
-        mSteps = (Recipe.Steps[]) selectedRecipeSteps;
+    private void activateRecipeDetailsFragment() {
+        RecipeDetailsFragment recipeDetailsFragment = new RecipeDetailsFragment();
+        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(Constants.RECIPE_DETAILS_PARCEL, mSelectedRecipe);
+        bundle.putParcelableArrayList(Constants.RECIPE_INGREDIENTS_PARCEL, mSelectedRecipeIngredients);
+        bundle.putParcelableArrayList(Constants.RECIPE_STEPS_PARCEL, mSelectedRecipeSteps);
+        recipeDetailsFragment.setArguments(bundle);
+        fragmentTransaction.add(R.id.recipe_details_fragment_container, recipeDetailsFragment);
+        fragmentTransaction.commit();
     }
-    private void setupCollapsingActionBarProperties() {
-        //Note: new settings in styles.xml/windowActionBar & windowNoTitle
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+    private void activateStepDetailsFragment() {
+        StepDetailsFragment recipeDetailsFragment = new StepDetailsFragment();
+        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(Constants.STEP_DETAILS_PARCEL, mSelectedStep);
+        recipeDetailsFragment.setArguments(bundle);
+        fragmentTransaction.add(R.id.recipe_details_fragment_container, recipeDetailsFragment);
+        fragmentTransaction.commit();
+    }
+    private void getRecipeDetails() {
+        mSelectedRecipe = getIntent().getParcelableExtra(Constants.RECIPE_DETAILS_PARCEL);
+        mSelectedRecipeIngredients = getIntent().getParcelableArrayListExtra(Constants.RECIPE_INGREDIENTS_PARCEL);
+        mSelectedRecipeSteps = getIntent().getParcelableArrayListExtra(Constants.RECIPE_STEPS_PARCEL);
+        mRecipeName = mSelectedRecipe.getRecipeName();
+    }
+    private void setActionBarTitle() {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar!=null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             if (mRecipeName!=null) actionBar.setTitle(mRecipeName);
-
-        }
-        if (mImageString!=null) {
-            Uri imageUri = Uri.fromFile(new File(mImageString));
-            Picasso.with(getApplicationContext())
-                    .load(imageUri)
-                    .error(R.drawable.ic_missing_image)
-                    .into(mRecipeImageView);
         }
     }
-    private void showListOfIngredients() {
-        mIngredientsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mIngredientsRecycleViewAdapter = new IngredientsRecycleViewAdapter(this, mIngredients);
-        mIngredientsRecycleViewAdapter.setContents(mIngredients);
-        mIngredientsRecyclerView.setAdapter(mIngredientsRecycleViewAdapter);
+
+    @Override
+    public void onStepSelected(Recipe.Step selectedStep) {
+        mSelectedStep = selectedStep;
+        activateStepDetailsFragment();
     }
 }

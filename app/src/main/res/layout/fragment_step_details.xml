@@ -1,0 +1,33 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="com.bakingstreet.StepDetailsFragment">
+
+    <LinearLayout
+        android:id="@+id/step_details_linear_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="start">
+
+        <TextView
+            android:id="@+id/step_short_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/default_text"/>
+
+        <ImageView
+            android:id="@+id/step_image"
+            android:layout_width="match_parent"
+            android:src="@drawable/ic_missing_image"
+            android:layout_height="100dp"/>
+
+        <TextView
+            android:id="@+id/step_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/default_text"/>
+
+    </LinearLayout>
+</FrameLayout>

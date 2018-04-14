@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.bakingstreet.R;
 import com.bakingstreet.data.Recipe;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -19,19 +21,19 @@ public class StepsRecycleViewAdapter extends RecyclerView.Adapter<StepsRecycleVi
 
     private Context mContext;
     final private StepsListItemClickHandler mOnClickHandler;
-    private Recipe[] mRecipes;
+    private List<Recipe.Step> mSteps;
 
-    public StepsRecycleViewAdapter(Context context, StepsListItemClickHandler listener, Recipe[] recipes) {
+    public StepsRecycleViewAdapter(Context context, StepsListItemClickHandler listener, List<Recipe.Step> steps) {
         this.mContext = context;
         this.mOnClickHandler = listener;
-        this.mRecipes = recipes;
+        this.mSteps = steps;
     }
 
     @NonNull
     @Override
     public StepsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        View view = inflater.inflate(R.layout.recipes_list_item, parent, false);
+        View view = inflater.inflate(R.layout.steps_list_item, parent, false);
         view.setFocusable(true);
         return new StepsViewHolder(view);
     }
@@ -42,24 +44,24 @@ public class StepsRecycleViewAdapter extends RecyclerView.Adapter<StepsRecycleVi
         updateStep(holder, position);
     }
     private void updateStep(StepsViewHolder holder, int position) {
-        TextView recipeDescriptionTV = holder.ingredientInRecycleView;
-        recipeDescriptionTV.setText(mRecipes[position].getRecipeName());
+        TextView stepShortDescriptionTV = holder.stepsInRecycleView;
+        stepShortDescriptionTV.setText(mSteps.get(position).getShortDescription());
     }
 
     @Override
     public int getItemCount() {
-        if (mRecipes == null) return 0;
-        else return mRecipes.length;
+        if (mSteps == null) return 0;
+        else return mSteps.size();
     }
 
-    public void setContents(Recipe[] recipe) {
-        if (recipe != null) mRecipes = recipe;
-        if (mRecipes != null) this.notifyDataSetChanged();
+    public void setContents(List<Recipe.Step> steps) {
+        if (steps != null) mSteps = steps;
+        if (mSteps != null) this.notifyDataSetChanged();
     }
 
     class StepsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        @BindView(R.id.short_description) TextView ingredientInRecycleView;
+        @BindView(R.id.short_description) TextView stepsInRecycleView;
         @BindView(R.id.steps_recyclerView_item_layout) ConstraintLayout container;
 
         StepsViewHolder(View itemView) {

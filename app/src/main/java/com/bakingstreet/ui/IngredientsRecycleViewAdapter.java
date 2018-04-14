@@ -12,15 +12,17 @@ import android.widget.TextView;
 import com.bakingstreet.R;
 import com.bakingstreet.data.Recipe;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class IngredientsRecycleViewAdapter extends RecyclerView.Adapter<IngredientsRecycleViewAdapter.IngredientViewHolder> {
 
     private Context mContext;
-    private Recipe.Ingredients[] mIngredients;
+    private List<Recipe.Ingredient> mIngredients;
 
-    public IngredientsRecycleViewAdapter(Context context, Recipe.Ingredients[] ingredients) {
+    public IngredientsRecycleViewAdapter(Context context, List<Recipe.Ingredient> ingredients) {
         this.mContext = context;
         this.mIngredients = ingredients;
     }
@@ -29,7 +31,7 @@ public class IngredientsRecycleViewAdapter extends RecyclerView.Adapter<Ingredie
     @Override
     public IngredientViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        View view = inflater.inflate(R.layout.recipes_list_item, parent, false);
+        View view = inflater.inflate(R.layout.ingredients_list_item, parent, false);
         view.setFocusable(true);
         return new IngredientViewHolder(view);
     }
@@ -40,18 +42,18 @@ public class IngredientsRecycleViewAdapter extends RecyclerView.Adapter<Ingredie
         updateIngredient(holder, position);
     }
     private void updateIngredient(IngredientViewHolder holder, int position) {
-        holder.ingredientInRecycleView.setText(mIngredients[position].getIngredient());
-        holder.quantityInRecycleView.setText(mIngredients[position].getQuantity());
-        holder.measureInRecycleView.setText(mIngredients[position].getMeasure());
+        holder.ingredientInRecycleView.setText(mIngredients.get(position).getIngredient());
+        holder.quantityInRecycleView.setText(mIngredients.get(position).getQuantity());
+        holder.measureInRecycleView.setText(mIngredients.get(position).getMeasure());
     }
 
     @Override
     public int getItemCount() {
         if (mIngredients == null) return 0;
-        else return mIngredients.length;
+        else return mIngredients.size();
     }
 
-    public void setContents(Recipe.Ingredients[] ingredients) {
+    public void setContents(List<Recipe.Ingredient> ingredients) {
         if (ingredients != null) mIngredients = ingredients;
         if (mIngredients != null) this.notifyDataSetChanged();
     }

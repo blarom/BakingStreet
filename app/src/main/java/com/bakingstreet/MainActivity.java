@@ -82,8 +82,8 @@ public class MainActivity extends AppCompatActivity implements RecipesRecycleVie
         Recipe selectedRecipe = mRecipesList[clickedItemIndex];
         Intent startRecipeDetailsActivityIntent = new Intent(this, RecipeDetailsActivity.class);
         startRecipeDetailsActivityIntent.putExtra(Constants.RECIPE_DETAILS_PARCEL, selectedRecipe);
-        startRecipeDetailsActivityIntent.putExtra(Constants.RECIPE_INGREDIENTS_PARCEL, selectedRecipe.getIngredients());
-        startRecipeDetailsActivityIntent.putExtra(Constants.RECIPE_STEPS_PARCEL, selectedRecipe.getSteps());
+        startRecipeDetailsActivityIntent.putParcelableArrayListExtra(Constants.RECIPE_INGREDIENTS_PARCEL, selectedRecipe.getIngredients());
+        startRecipeDetailsActivityIntent.putParcelableArrayListExtra(Constants.RECIPE_STEPS_PARCEL, selectedRecipe.getSteps());
         startActivity(startRecipeDetailsActivityIntent);
     }
 }
