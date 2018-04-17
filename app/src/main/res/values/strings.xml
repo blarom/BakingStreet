@@ -5,4 +5,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="back_to_details">Recipe</string>
+    <string name="previous_step">Prev. Step</string>
+    <string name="next_step">Next Step</string>
 </resources>

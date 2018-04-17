@@ -1,8 +1,11 @@
 package com.bakingstreet;
 
 import android.content.Intent;
+import android.os.Parcelable;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -23,6 +26,7 @@ public class MainActivity extends AppCompatActivity implements RecipesRecycleVie
     @BindView(R.id.recipes_recycler_view) RecyclerView mRecipesRecyclerView;
     Recipe[] mRecipesList;
     RecipesRecycleViewAdapter mRecipesRecycleViewAdapter;
+    private Parcelable mLayoutManagerSavedState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +39,32 @@ public class MainActivity extends AppCompatActivity implements RecipesRecycleVie
         updateRecipesWithImages();
         showListOfRecipesForSelection();
 
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mLayoutManagerSavedState = mRecipesRecyclerView.getLayoutManager().onSaveInstanceState();
+        outState.putParcelable(Constants.SAVED_LAYOUT_MANAGER, mLayoutManagerSavedState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if(savedInstanceState != null) {
+
+            mLayoutManagerSavedState = savedInstanceState.getParcelable(Constants.SAVED_LAYOUT_MANAGER);
+            //mRecipesRecyclerView.setLayoutManager(mLayoutManagerSavedState);
+            //mRecipesRecycleViewAdapter.setContents(mRecipesList);
+        }
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (mLayoutManagerSavedState != null) {
+            mRecipesRecyclerView.getLayoutManager().onRestoreInstanceState(mLayoutManagerSavedState);
+        }
     }
 
     //Structural methods
@@ -51,8 +81,13 @@ public class MainActivity extends AppCompatActivity implements RecipesRecycleVie
         }
     }
     private void showListOfRecipesForSelection() {
-        int numberOfColumns = 1;
-        mRecipesRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        int numberOfColumns;
+        if (Constants.getSmallestWidth(getApplicationContext()) < Constants.TABLET_SMALLEST_WIDTH_THRESHOLD) {
+            numberOfColumns = Constants.NUMBER_GRIDLAYOUT_COLUMNS_PHONE;
+        } else numberOfColumns = Constants.NUMBER_GRIDLAYOUT_COLUMNS_TABLET;
+
+        mRecipesRecyclerView.setLayoutManager(new GridLayoutManager(this, numberOfColumns));
         mRecipesRecycleViewAdapter = new RecipesRecycleViewAdapter(this, this, mRecipesList);
         mRecipesRecycleViewAdapter.setContents(mRecipesList);
         mRecipesRecyclerView.setAdapter(mRecipesRecycleViewAdapter);
@@ -76,7 +111,6 @@ public class MainActivity extends AppCompatActivity implements RecipesRecycleVie
         }
         return json;
     }
-
     @Override
     public void onRecipesListItemClick(int clickedItemIndex) {
         Recipe selectedRecipe = mRecipesList[clickedItemIndex];

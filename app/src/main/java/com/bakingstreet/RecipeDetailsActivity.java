@@ -12,14 +12,14 @@ import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 
-public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDetailsFragment.OnStepSelectedListener {
+public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDetailsFragment.OnStepSelectedListener, StepDetailsFragment.NavigationButtonClickHandler {
 
     private Recipe mSelectedRecipe;
     private ArrayList<Recipe.Ingredient> mSelectedRecipeIngredients;
     private ArrayList<Recipe.Step> mSelectedRecipeSteps;
     private String mRecipeName;
     private FragmentManager mFragmentManager;
-    private Recipe.Step mSelectedStep;
+    private int mSelectedStepIndex;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,11 +33,11 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDe
         //Methods
         getRecipeDetails();
         setActionBarTitle();
-        activateRecipeDetailsFragment();
+        setFragmentLayouts();
     }
 
     //Structural methods
-    private void activateRecipeDetailsFragment() {
+    private void setRecipeDetailsFragment(int viewId) {
         RecipeDetailsFragment recipeDetailsFragment = new RecipeDetailsFragment();
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
 
@@ -46,17 +46,17 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDe
         bundle.putParcelableArrayList(Constants.RECIPE_INGREDIENTS_PARCEL, mSelectedRecipeIngredients);
         bundle.putParcelableArrayList(Constants.RECIPE_STEPS_PARCEL, mSelectedRecipeSteps);
         recipeDetailsFragment.setArguments(bundle);
-        fragmentTransaction.add(R.id.recipe_details_fragment_container, recipeDetailsFragment);
+        fragmentTransaction.replace(viewId, recipeDetailsFragment);
         fragmentTransaction.commit();
     }
-    private void activateStepDetailsFragment() {
+    private void setStepDetailsFragment(int viewId, int selectedStepIndex) {
         StepDetailsFragment recipeDetailsFragment = new StepDetailsFragment();
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
 
         Bundle bundle = new Bundle();
-        bundle.putParcelable(Constants.STEP_DETAILS_PARCEL, mSelectedStep);
+        bundle.putParcelable(Constants.STEP_DETAILS_PARCEL, mSelectedRecipeSteps.get(selectedStepIndex));
         recipeDetailsFragment.setArguments(bundle);
-        fragmentTransaction.add(R.id.recipe_details_fragment_container, recipeDetailsFragment);
+        fragmentTransaction.replace(viewId, recipeDetailsFragment);
         fragmentTransaction.commit();
     }
     private void getRecipeDetails() {
@@ -72,10 +72,43 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDe
             if (mRecipeName!=null) actionBar.setTitle(mRecipeName);
         }
     }
+    private void setFragmentLayouts() {
+        if (Constants.getSmallestWidth(getApplicationContext()) < Constants.TABLET_SMALLEST_WIDTH_THRESHOLD) {
+            setRecipeDetailsFragment(R.id.recipe_details_fragment_container);
+        } else {
+            setRecipeDetailsFragment(R.id.recipe_details_fragment_container);
+            setStepDetailsFragment(R.id.recipe_step_fragment_container, mSelectedStepIndex);
+        }
+    }
+
+    //Functional methods
+    @Override
+    public void onStepSelected(int selectedStepIndex) {
+        mSelectedStepIndex = selectedStepIndex;
+        setStepDetailsFragmentDependingOnScreenSize();
+    }
 
     @Override
-    public void onStepSelected(Recipe.Step selectedStep) {
-        mSelectedStep = selectedStep;
-        activateStepDetailsFragment();
+    public void onBackButtonClick() {
+        setRecipeDetailsFragment(R.id.recipe_details_fragment_container);
+    }
+    @Override
+    public void onPrevStepClick() {
+        if (mSelectedStepIndex > 0) mSelectedStepIndex--;
+        else mSelectedStepIndex = 0;
+        setStepDetailsFragmentDependingOnScreenSize();
+    }
+    @Override
+    public void onNextStepClick() {
+        if (mSelectedStepIndex < mSelectedRecipeSteps.size()-1) mSelectedStepIndex++;
+        else mSelectedStepIndex = mSelectedRecipeSteps.size()-1;
+        setStepDetailsFragmentDependingOnScreenSize();
+    }
+    private void setStepDetailsFragmentDependingOnScreenSize() {
+        if (Constants.getSmallestWidth(getApplicationContext()) < Constants.TABLET_SMALLEST_WIDTH_THRESHOLD) {
+            setStepDetailsFragment(R.id.recipe_details_fragment_container, mSelectedStepIndex);
+        } else {
+            setStepDetailsFragment(R.id.recipe_step_fragment_container, mSelectedStepIndex);
+        }
     }
 }

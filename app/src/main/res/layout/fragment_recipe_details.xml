@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
-    android:id="@+id/container_scrollview"
+    android:id="@+id/recipe_details_fragment_container"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -25,7 +25,8 @@
         <ImageView
             android:id="@+id/recipe_image"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="200dp"
+            android:adjustViewBounds="true"
             android:contentDescription="@string/recipe_image"
             android:scaleType="fitCenter"/>
 

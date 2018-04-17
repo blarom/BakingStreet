@@ -2,6 +2,7 @@ package com.bakingstreet;
 
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.bakingstreet.data.Constants;
@@ -28,6 +30,7 @@ import butterknife.ButterKnife;
 public class RecipeDetailsFragment extends Fragment implements StepsRecycleViewAdapter.StepsListItemClickHandler {
 
     private Recipe mSelectedRecipe;
+    @BindView(R.id.recipe_details_fragment_container) ScrollView mRecipeDetailsFragmentContainer;
     @BindView(R.id.recipe_ingredients_recycler_view) RecyclerView mIngredientsRecyclerView;
     @BindView(R.id.recipe_steps_recycler_view) RecyclerView mStepsRecyclerView;
     @BindView(R.id.recipe_image) ImageView mRecipeImageView;
@@ -61,7 +64,6 @@ public class RecipeDetailsFragment extends Fragment implements StepsRecycleViewA
 
         return rootView;
     }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -89,10 +91,34 @@ public class RecipeDetailsFragment extends Fragment implements StepsRecycleViewA
         }
         if (mImageString!=null) {
             Uri imageUri = Uri.fromFile(new File(mImageString));
+//            Picasso.with(getContext())
+//                    .load(imageUri)
+//                    .error(R.drawable.ic_missing_image)
+//                    .into(mRecipeImageView);
+
             Picasso.with(getContext())
                     .load(imageUri)
                     .error(R.drawable.ic_missing_image)
-                    .into(mRecipeImageView);
+                    .into(mRecipeImageView, new com.squareup.picasso.Callback() {
+                        @Override
+                        public void onSuccess() {
+                            //Adapted from github\blarom\PopularMovies
+                            Drawable drawable = mRecipeImageView.getDrawable();
+                            int drawableWidth = drawable.getIntrinsicWidth();
+                            int drawableHeight = drawable.getIntrinsicHeight();
+
+                            int containerWidth = mRecipeDetailsFragmentContainer.getWidth();
+
+                            //Set the imageView container height to match the image dimensions
+                            int maxImageViewHeight = (int) (((float) drawableHeight) / ((float) drawableWidth) * ((float) containerWidth));
+                            mRecipeImageView.setMaxHeight(maxImageViewHeight);
+                            mRecipeImageView.requestLayout();
+                        }
+
+                        @Override
+                        public void onError() {
+                        }
+                    });
         }
     }
     private void setupListOfIngredients() {
@@ -109,10 +135,9 @@ public class RecipeDetailsFragment extends Fragment implements StepsRecycleViewA
     //Functional methods
     @Override
     public void onStepsListItemClick(int clickedItemIndex) {
-        Recipe.Step selectedStep = mSteps.get(clickedItemIndex);
-        onStepSelectedListener.onStepSelected(selectedStep);
+        onStepSelectedListener.onStepSelected(clickedItemIndex);
     }
     public interface OnStepSelectedListener {
-        void onStepSelected(Recipe.Step selectedStep);
+        void onStepSelected(int clickedItemIndex);
     }
 }

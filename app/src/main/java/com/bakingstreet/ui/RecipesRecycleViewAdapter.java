@@ -1,6 +1,7 @@
 package com.bakingstreet.ui;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -25,6 +26,7 @@ public class RecipesRecycleViewAdapter extends RecyclerView.Adapter<RecipesRecyc
     private Context mContext;
     final private RecipesListItemClickHandler mOnClickHandler;
     private Recipe[] mRecipes;
+    private int mBiggestHolderWidth;
 
     public RecipesRecycleViewAdapter(Context context, RecipesListItemClickHandler listener, Recipe[] recipes) {
         this.mContext = context;
@@ -56,12 +58,39 @@ public class RecipesRecycleViewAdapter extends RecyclerView.Adapter<RecipesRecyc
         Uri imageUri = Uri.fromFile(new File(mRecipes[position].getImage()));
 
         ImageView imageView = holder.recipeImageInRecycleView;
+//        holder.container.requestLayout();
+//        Picasso.with(mContext)
+//                .load(imageUri)
+//                .error(R.drawable.ic_missing_image)
+//                .into(imageView);
+
         holder.container.requestLayout();
         Picasso.with(mContext)
                 .load(imageUri)
                 .error(R.drawable.ic_missing_image)
-                .into(imageView);
+                .into(imageView, new com.squareup.picasso.Callback() {
+                    @Override
+                    public void onSuccess() {
+                        //Adapted from github\blarom\PopularMovies
+                        Drawable drawable = holder.recipeImageInRecycleView.getDrawable();
+                        int drawableWidth = drawable.getIntrinsicWidth();
+                        int drawableHeight = drawable.getIntrinsicHeight();
 
+                        int holderWidth = holder.container.getWidth();
+                        if (mBiggestHolderWidth >= holderWidth) holderWidth = mBiggestHolderWidth;
+                        else mBiggestHolderWidth = holderWidth;
+
+                        //Set the holder height to match the image dimensions
+                        int maxHolderHeight = (int) (((float) drawableHeight) / ((float) drawableWidth) * ((float) holderWidth));
+                        holder.container.setMinHeight(maxHolderHeight);
+                        holder.container.setMaxHeight(maxHolderHeight);
+                        holder.container.requestLayout();
+                    }
+
+                    @Override
+                    public void onError() {
+                    }
+                });
     }
 
     @Override
