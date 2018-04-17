@@ -33,7 +33,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDe
         //Methods
         getRecipeDetails();
         setActionBarTitle();
-        setFragmentLayouts();
+        if(savedInstanceState == null) setFragmentLayouts();
     }
 
     //Structural methods

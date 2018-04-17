@@ -40,14 +40,12 @@ public class MainActivity extends AppCompatActivity implements RecipesRecycleVie
         showListOfRecipesForSelection();
 
     }
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         mLayoutManagerSavedState = mRecipesRecyclerView.getLayoutManager().onSaveInstanceState();
         outState.putParcelable(Constants.SAVED_LAYOUT_MANAGER, mLayoutManagerSavedState);
     }
-
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);

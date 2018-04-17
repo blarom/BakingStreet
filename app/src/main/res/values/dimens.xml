@@ -2,4 +2,7 @@
 <resources>
     <dimen name="recipe_recyclerView_StartMargin">8dp</dimen>
     <dimen name="recipe_recyclerViewElement_TextSize">16sp</dimen>
+    <dimen name="fragment_step_details_description_height">100dp</dimen>
+    <dimen name="fragment_step_details_title_marginTop">8dp</dimen>
+    <dimen name="fragment_step_details_title_textSize">20sp</dimen>
 </resources>

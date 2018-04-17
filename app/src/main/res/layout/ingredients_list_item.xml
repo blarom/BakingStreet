@@ -16,8 +16,16 @@
         android:layout_marginTop="8dp"
         android:gravity="center_horizontal"
         android:text="@string/default_text"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/guideline_ingredient"
         app:layout_constraintTop_toTopOf="parent"/>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline_ingredient"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.2"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        />
 
     <TextView
         android:id="@+id/quantity"
@@ -27,8 +35,8 @@
         android:layout_marginTop="8dp"
         android:gravity="center_horizontal"
         android:text="@string/default_text"
-        app:layout_constraintStart_toEndOf="@+id/measure"
-        app:layout_constraintTop_toBottomOf="@+id/ingredient"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/measure"
@@ -38,8 +46,8 @@
         android:layout_marginTop="8dp"
         android:gravity="center_horizontal"
         android:text="@string/default_text"
-        app:layout_constraintStart_toStartOf="@+id/ingredient"
-        app:layout_constraintTop_toBottomOf="@+id/ingredient"/>
+        app:layout_constraintStart_toEndOf="@+id/quantity"
+        app:layout_constraintTop_toTopOf="parent"/>
 
 
 </android.support.constraint.ConstraintLayout>

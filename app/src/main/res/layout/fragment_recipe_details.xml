@@ -16,14 +16,9 @@
         android:gravity="start"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/recipe_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/default_text"/>
-
         <ImageView
             android:id="@+id/recipe_image"
+            android:layout_marginTop="8dp"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:adjustViewBounds="true"

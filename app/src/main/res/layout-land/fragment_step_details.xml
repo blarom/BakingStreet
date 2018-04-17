@@ -7,38 +7,45 @@
     android:layout_height="match_parent"
     tools:context="com.bakingstreet.StepDetailsFragment">
 
-    <LinearLayout
-        android:id="@+id/step_details_linear_container"
+    <TextView
+        android:id="@+id/step_short_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/fragment_step_details_title_marginTop"
+        android:gravity="center_horizontal"
+        android:text="@string/default_text"
+        android:textSize="@dimen/fragment_step_details_title_textSize"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/step_image"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/ic_missing_image"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
-        android:gravity="start"
-        android:orientation="vertical"
-        android:layout_height="match_parent"
-        android:layout_width="match_parent">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/step_short_description"/>
 
-        <TextView
-            android:id="@+id/step_short_description"
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/default_text"/>
-
-        <ImageView
-            android:id="@+id/step_image"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:src="@drawable/ic_missing_image"/>
-
-        <TextView
-            android:id="@+id/step_description"
-            android:visibility="gone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/default_text"/>
-
-    </LinearLayout>
+    <TextView
+        android:id="@+id/step_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="64dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:text="@string/default_text"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/bottom_navigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="gone"/>
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottom_navigation"

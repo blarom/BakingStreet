@@ -34,7 +34,6 @@ public class RecipeDetailsFragment extends Fragment implements StepsRecycleViewA
     @BindView(R.id.recipe_ingredients_recycler_view) RecyclerView mIngredientsRecyclerView;
     @BindView(R.id.recipe_steps_recycler_view) RecyclerView mStepsRecyclerView;
     @BindView(R.id.recipe_image) ImageView mRecipeImageView;
-    @BindView(R.id.recipe_name) TextView mRecipeNameTextView;
     private List<Recipe.Ingredient> mIngredients;
     private List<Recipe.Step> mSteps;
     private String mImageString;
@@ -86,9 +85,6 @@ public class RecipeDetailsFragment extends Fragment implements StepsRecycleViewA
         }
     }
     private void setupLayoutValues() {
-        if (mRecipeName!=null) {
-            mRecipeNameTextView.setText(mRecipeName);
-        }
         if (mImageString!=null) {
             Uri imageUri = Uri.fromFile(new File(mImageString));
 //            Picasso.with(getContext())
