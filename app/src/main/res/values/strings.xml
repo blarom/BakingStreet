@@ -8,4 +8,7 @@
     <string name="back_to_details">Recipe</string>
     <string name="previous_step">Prev. Step</string>
     <string name="next_step">Next Step</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="activity_name_bakinghelperwidget">BakingHelperWidget</string>
 </resources>

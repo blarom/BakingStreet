@@ -3,17 +3,21 @@
     android:id="@+id/recipes_recyclerView_item_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="center_horizontal">
 
-    <ImageView
+    <com.santalu.aspectratioimageview.AspectRatioImageView
         android:id="@+id/recipe_image"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
+        app:ari_aspect="height"
+        app:ari_ratio="0.75"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:contentDescription="@string/recipe_image"/>
+        android:contentDescription="@string/recipe_image"
+        app:srcCompat="@drawable/ic_missing_image"/>
 
     <TextView
         android:id="@+id/recipe_description"

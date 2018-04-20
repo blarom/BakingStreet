@@ -6,8 +6,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-import com.bakingstreet.data.Constants;
+import com.bakingstreet.data.Statics;
 import com.bakingstreet.data.Recipe;
+
 import java.util.ArrayList;
 
 import butterknife.ButterKnife;
@@ -42,9 +43,9 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDe
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
 
         Bundle bundle = new Bundle();
-        bundle.putParcelable(Constants.RECIPE_DETAILS_PARCEL, mSelectedRecipe);
-        bundle.putParcelableArrayList(Constants.RECIPE_INGREDIENTS_PARCEL, mSelectedRecipeIngredients);
-        bundle.putParcelableArrayList(Constants.RECIPE_STEPS_PARCEL, mSelectedRecipeSteps);
+        bundle.putParcelable(Statics.RECIPE_DETAILS_PARCEL, mSelectedRecipe);
+        bundle.putParcelableArrayList(Statics.RECIPE_INGREDIENTS_PARCEL, mSelectedRecipeIngredients);
+        bundle.putParcelableArrayList(Statics.RECIPE_STEPS_PARCEL, mSelectedRecipeSteps);
         recipeDetailsFragment.setArguments(bundle);
         fragmentTransaction.replace(viewId, recipeDetailsFragment);
         fragmentTransaction.commit();
@@ -54,15 +55,16 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDe
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
 
         Bundle bundle = new Bundle();
-        bundle.putParcelable(Constants.STEP_DETAILS_PARCEL, mSelectedRecipeSteps.get(selectedStepIndex));
+        bundle.putParcelable(Statics.STEP_DETAILS_PARCEL, mSelectedRecipeSteps.get(selectedStepIndex));
+        bundle.putParcelable(Statics.RECIPE_DETAILS_PARCEL, mSelectedRecipe);
         recipeDetailsFragment.setArguments(bundle);
         fragmentTransaction.replace(viewId, recipeDetailsFragment);
         fragmentTransaction.commit();
     }
     private void getRecipeDetails() {
-        mSelectedRecipe = getIntent().getParcelableExtra(Constants.RECIPE_DETAILS_PARCEL);
-        mSelectedRecipeIngredients = getIntent().getParcelableArrayListExtra(Constants.RECIPE_INGREDIENTS_PARCEL);
-        mSelectedRecipeSteps = getIntent().getParcelableArrayListExtra(Constants.RECIPE_STEPS_PARCEL);
+        mSelectedRecipe = getIntent().getParcelableExtra(Statics.RECIPE_DETAILS_PARCEL);
+        mSelectedRecipeIngredients = getIntent().getParcelableArrayListExtra(Statics.RECIPE_INGREDIENTS_PARCEL);
+        mSelectedRecipeSteps = getIntent().getParcelableArrayListExtra(Statics.RECIPE_STEPS_PARCEL);
         mRecipeName = mSelectedRecipe.getRecipeName();
     }
     private void setActionBarTitle() {
@@ -73,7 +75,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDe
         }
     }
     private void setFragmentLayouts() {
-        if (Constants.getSmallestWidth(getApplicationContext()) < Constants.TABLET_SMALLEST_WIDTH_THRESHOLD) {
+        if (Statics.getSmallestWidth(getApplicationContext()) < Statics.TABLET_SMALLEST_WIDTH_THRESHOLD) {
             setRecipeDetailsFragment(R.id.recipe_details_fragment_container);
         } else {
             setRecipeDetailsFragment(R.id.recipe_details_fragment_container);
@@ -105,7 +107,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDe
         setStepDetailsFragmentDependingOnScreenSize();
     }
     private void setStepDetailsFragmentDependingOnScreenSize() {
-        if (Constants.getSmallestWidth(getApplicationContext()) < Constants.TABLET_SMALLEST_WIDTH_THRESHOLD) {
+        if (Statics.getSmallestWidth(getApplicationContext()) < Statics.TABLET_SMALLEST_WIDTH_THRESHOLD) {
             setStepDetailsFragment(R.id.recipe_details_fragment_container, mSelectedStepIndex);
         } else {
             setStepDetailsFragment(R.id.recipe_step_fragment_container, mSelectedStepIndex);

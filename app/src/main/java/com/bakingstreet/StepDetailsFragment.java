@@ -14,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.bakingstreet.data.Constants;
+import com.bakingstreet.data.Statics;
 import com.bakingstreet.data.Recipe;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -28,8 +28,10 @@ import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.santalu.aspectratioimageview.AspectRatioImageView;
+import com.squareup.picasso.Picasso;
 
-import java.net.URL;
+import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,8 +48,10 @@ public class StepDetailsFragment extends Fragment {
     @BindView(R.id.step_video) SimpleExoPlayerView mStepVideoView;
     @BindView(R.id.step_description) TextView mStepDescriptionTextView;
     @BindView(R.id.step_short_description) TextView mStepShortDescriptionTextView;
+    @BindView(R.id.step_image) AspectRatioImageView mStepImageView;
     NavigationButtonClickHandler mOnNavigationButtonClickHandler;
     private SimpleExoPlayer mExoPlayer;
+    private Recipe mRecipe;
 
     public StepDetailsFragment() {
         // Required empty public constructor
@@ -101,13 +105,16 @@ public class StepDetailsFragment extends Fragment {
     //Structural methods
     private void getStepDetails() {
         if (getArguments() != null) {
-            mStep = getArguments().getParcelable(Constants.STEP_DETAILS_PARCEL);
+            mStep = getArguments().getParcelable(Statics.STEP_DETAILS_PARCEL);
+            mRecipe = getArguments().getParcelable(Statics.RECIPE_DETAILS_PARCEL);
         }
         if (mStep!=null) {
             mVideoUrl = mStep.getVideoUrl();
             mThumbnailUrl = mStep.getThumbnailUrl();
             mDescription = mStep.getDescription();
             mShortDescription = mStep.getShortDescription();
+
+            if (mThumbnailUrl.equals("")) mThumbnailUrl = mRecipe.getImage();
         }
     }
     private void setupLayoutValues() {
@@ -116,9 +123,19 @@ public class StepDetailsFragment extends Fragment {
         if (mStepVideoView != null) {
             mStepVideoView.setDefaultArtwork(BitmapFactory.decodeResource(getResources(), R.drawable.ic_missing_image));
 
-            initializeVideoPlayer(mVideoUrl);
+            if (mVideoUrl.equals("")) initializeVideoPlayer(mVideoUrl);
+            else setStepImage();
         }
     }
+
+    private void setStepImage() {
+        Uri imageUri = Uri.fromFile(new File(mThumbnailUrl));
+        Picasso.with(getContext())
+                .load(imageUri)
+                .error(R.drawable.ic_missing_image)
+                .into(mStepImageView);
+    }
+
     private void initializeVideoPlayer(String videoUrl) {
 
         if (getContext()==null) return;
@@ -130,7 +147,7 @@ public class StepDetailsFragment extends Fragment {
         mStepVideoView.setPlayer(mExoPlayer);
 
         // Setup MediaSource
-        String userAgent = Util.getUserAgent(getContext(), "ClassicalMusicQuiz");
+        String userAgent = Util.getUserAgent(getContext(), "BakingStreet");
         MediaSource mediaSource = new ExtractorMediaSource(
                 Uri.parse(videoUrl),
                 new DefaultDataSourceFactory(getContext(), userAgent),

@@ -17,6 +17,7 @@ import com.bakingstreet.data.Recipe;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,13 +26,12 @@ public class RecipesRecycleViewAdapter extends RecyclerView.Adapter<RecipesRecyc
 
     private Context mContext;
     final private RecipesListItemClickHandler mOnClickHandler;
-    private Recipe[] mRecipes;
+    private List<Recipe> mRecipes;
     private int mBiggestHolderWidth;
 
-    public RecipesRecycleViewAdapter(Context context, RecipesListItemClickHandler listener, Recipe[] recipes) {
+    public RecipesRecycleViewAdapter(Context context, RecipesListItemClickHandler listener) {
         this.mContext = context;
         this.mOnClickHandler = listener;
-        this.mRecipes = recipes;
     }
 
     @NonNull
@@ -51,57 +51,28 @@ public class RecipesRecycleViewAdapter extends RecyclerView.Adapter<RecipesRecyc
     }
     private void updateItemDescription(RecipeViewHolder holder, int position) {
         TextView recipeDescriptionTV = holder.recipeDescriptionInRecycleView;
-        recipeDescriptionTV.setText(mRecipes[position].getRecipeName());
+        recipeDescriptionTV.setText(mRecipes.get(position).getRecipeName());
     }
     private void updateItemImage(final RecipeViewHolder holder, int position) {
 
-        Uri imageUri = Uri.fromFile(new File(mRecipes[position].getImage()));
+        Uri imageUri = Uri.fromFile(new File(mRecipes.get(position).getImage()));
 
-        ImageView imageView = holder.recipeImageInRecycleView;
-//        holder.container.requestLayout();
-//        Picasso.with(mContext)
-//                .load(imageUri)
-//                .error(R.drawable.ic_missing_image)
-//                .into(imageView);
-
-        holder.container.requestLayout();
         Picasso.with(mContext)
                 .load(imageUri)
                 .error(R.drawable.ic_missing_image)
-                .into(imageView, new com.squareup.picasso.Callback() {
-                    @Override
-                    public void onSuccess() {
-                        //Adapted from github\blarom\PopularMovies
-                        Drawable drawable = holder.recipeImageInRecycleView.getDrawable();
-                        int drawableWidth = drawable.getIntrinsicWidth();
-                        int drawableHeight = drawable.getIntrinsicHeight();
-
-                        int holderWidth = holder.container.getWidth();
-                        if (mBiggestHolderWidth >= holderWidth) holderWidth = mBiggestHolderWidth;
-                        else mBiggestHolderWidth = holderWidth;
-
-                        //Set the holder height to match the image dimensions
-                        int maxHolderHeight = (int) (((float) drawableHeight) / ((float) drawableWidth) * ((float) holderWidth));
-                        holder.container.setMinHeight(maxHolderHeight);
-                        holder.container.setMaxHeight(maxHolderHeight);
-                        holder.container.requestLayout();
-                    }
-
-                    @Override
-                    public void onError() {
-                    }
-                });
+                .into(holder.recipeImageInRecycleView);
     }
 
     @Override
     public int getItemCount() {
-        if (mRecipes == null) return 0;
-        else return mRecipes.length;
+        return (mRecipes == null) ? 0 : mRecipes.size();
     }
 
-    public void setContents(Recipe[] recipe) {
-        if (recipe != null) mRecipes = recipe;
-        if (mRecipes != null) this.notifyDataSetChanged();
+    public void setContents(List<Recipe> recipe) {
+        mRecipes = recipe;
+        if (recipe != null) {
+            this.notifyDataSetChanged();
+        }
     }
 
     class RecipeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

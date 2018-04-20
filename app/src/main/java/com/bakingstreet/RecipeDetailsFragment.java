@@ -13,9 +13,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ScrollView;
-import android.widget.TextView;
 
-import com.bakingstreet.data.Constants;
+import com.bakingstreet.data.Statics;
 import com.bakingstreet.data.Recipe;
 import com.bakingstreet.ui.IngredientsRecycleViewAdapter;
 import com.bakingstreet.ui.StepsRecycleViewAdapter;
@@ -74,9 +73,9 @@ public class RecipeDetailsFragment extends Fragment implements StepsRecycleViewA
     private void getRecipeDetails() {
 
         if (getArguments() != null) {
-            mSelectedRecipe = getArguments().getParcelable(Constants.RECIPE_DETAILS_PARCEL);
-            mIngredients = getArguments().getParcelableArrayList(Constants.RECIPE_INGREDIENTS_PARCEL);
-            mSteps = getArguments().getParcelableArrayList(Constants.RECIPE_STEPS_PARCEL);
+            mSelectedRecipe = getArguments().getParcelable(Statics.RECIPE_DETAILS_PARCEL);
+            mIngredients = getArguments().getParcelableArrayList(Statics.RECIPE_INGREDIENTS_PARCEL);
+            mSteps = getArguments().getParcelableArrayList(Statics.RECIPE_STEPS_PARCEL);
         }
         if (mSelectedRecipe!=null) {
             mImageString = mSelectedRecipe.getImage();
