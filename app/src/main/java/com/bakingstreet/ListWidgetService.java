@@ -38,7 +38,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     private Context mContext;
     private List<Recipe> mRecipesList;
 
-    public ListRemoteViewsFactory(Context applicationContext) {
+    ListRemoteViewsFactory(Context applicationContext) {
         mContext = applicationContext;
     }
 
@@ -55,7 +55,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     }
 
     @Override public RemoteViews getViewAt(int position) {
-        RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.ingredients_list_item);
+        RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.baking_helper_widget_list_element);
 
         Recipe.Ingredient ingredient = mRecipesList.get(0).getIngredients().get(position);
         views.setTextViewText(R.id.ingredient, ingredient.getIngredient());
@@ -72,7 +72,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
     @Override
     public int getViewTypeCount() {
-        return 1; // Treat all items in the GridView the same
+        return 1; // Treat all items in the ListView the same
     }
 
     @Override

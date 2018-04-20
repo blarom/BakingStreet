@@ -14,6 +14,12 @@ import java.util.List;
 
 public class BakingHelperWidgetProvider extends AppWidgetProvider {
 
+    public static void updateBakingHelperWidgets(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        for (int appWidgetId : appWidgetIds) {
+            updateAppWidget(context, appWidgetManager, appWidgetId);
+        }
+    }
+
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
 
         // Construct the RemoteViews object
@@ -32,25 +38,13 @@ public class BakingHelperWidgetProvider extends AppWidgetProvider {
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 
-    public static void updateBakingHelperWidgets(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId);
-        }
-    }
-
     private static void updateWidgetRecipeNames(Context context, RemoteViews views, int appWidgetId) {
         List<Recipe> recipesList = Statics.getRecipeListFromJson(context);
         if (recipesList != null) {
             views.setTextViewText(R.id.recipes, recipesList.get(0).getRecipeName());
-            views.setTextViewText(R.id.widget_recipe_name1, recipesList.get(1).getRecipeName());
-            views.setTextViewText(R.id.widget_recipe_name2, recipesList.get(2).getRecipeName());
-            views.setTextViewText(R.id.widget_recipe_name3, recipesList.get(3).getRecipeName());
         }
         else {
-            views.setTextViewText(R.id.widget_recipe_name, "Default Recipe 1");
-            views.setTextViewText(R.id.widget_recipe_name1, "Default Recipe 2");
-            views.setTextViewText(R.id.widget_recipe_name2, "Default Recipe 3");
-            views.setTextViewText(R.id.widget_recipe_name3, "Default Recipe 4");
+            views.setTextViewText(R.id.recipes, "Default Recipe 1");
         }
     }
 
@@ -59,25 +53,8 @@ public class BakingHelperWidgetProvider extends AppWidgetProvider {
         intent.putExtra(Statics.WIDGET_RECIPE_SELECTION, 0);
         intent.putExtra(Statics.CALLING_ACTIVITY, context.getString(R.string.activity_name_bakinghelperwidget));
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-        views.setOnClickPendingIntent(R.id.widget_recipe_name, pendingIntent);
+        views.setOnClickPendingIntent(R.id.recipes, pendingIntent);
 
-        Intent intent1 = new Intent(context, MainActivity.class);
-        intent1.putExtra(Statics.WIDGET_RECIPE_SELECTION, 1);
-        intent1.putExtra(Statics.CALLING_ACTIVITY, context.getString(R.string.activity_name_bakinghelperwidget));
-        PendingIntent pendingIntent1 = PendingIntent.getActivity(context, 0, intent1, 0);
-        views.setOnClickPendingIntent(R.id.widget_recipe_name1, pendingIntent1);
-
-        Intent intent2 = new Intent(context, MainActivity.class);
-        intent2.putExtra(Statics.WIDGET_RECIPE_SELECTION, 2);
-        intent2.putExtra(Statics.CALLING_ACTIVITY, context.getString(R.string.activity_name_bakinghelperwidget));
-        PendingIntent pendingIntent2 = PendingIntent.getActivity(context, 0, intent2, 0);
-        views.setOnClickPendingIntent(R.id.widget_recipe_name2, pendingIntent2);
-
-        Intent intent3 = new Intent(context, MainActivity.class);
-        intent3.putExtra(Statics.WIDGET_RECIPE_SELECTION, 3);
-        intent3.putExtra(Statics.CALLING_ACTIVITY, context.getString(R.string.activity_name_bakinghelperwidget));
-        PendingIntent pendingIntent3 = PendingIntent.getActivity(context, 0, intent3, 0);
-        views.setOnClickPendingIntent(R.id.widget_recipe_name3, pendingIntent3);
     }
 
     @Override

@@ -6,11 +6,11 @@
               android:padding="@dimen/widget_margin"
               android:orientation="vertical">
 
-    <ListView
+    <TextView
         android:id="@+id/recipes"
         android:layout_width="match_parent"
         android:layout_height="20dp">
-    </ListView>
+    </TextView>
 
     <ListView
         android:id="@+id/recipe_ingredients"
