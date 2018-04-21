@@ -56,10 +56,7 @@ public class StepDetailsFragment extends Fragment {
     public StepDetailsFragment() {
         // Required empty public constructor
     }
-
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         //Initializing layout parameters
         View rootView = inflater.inflate(R.layout.fragment_step_details, container, false);
@@ -72,34 +69,13 @@ public class StepDetailsFragment extends Fragment {
 
         return rootView;
     }
-    @Override
-    public void onAttach(Context context) {
+    @Override public void onAttach(Context context) {
         super.onAttach(context);
         mOnNavigationButtonClickHandler = (NavigationButtonClickHandler) context;
     }
-    @Override
-    public void onStop() {
+    @Override public void onStop() {
         super.onStop();
         releasePlayer();
-    }
-
-    private void setupBottomNavigation() {
-
-        mBottomNavigationView.setOnNavigationItemSelectedListener(
-                new BottomNavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.action_back:
-                                mOnNavigationButtonClickHandler.onBackButtonClick(); break;
-                            case R.id.action_previous_step:
-                                mOnNavigationButtonClickHandler.onPrevStepClick(); break;
-                            case R.id.action_next_step:
-                                mOnNavigationButtonClickHandler.onNextStepClick(); break;
-                        }
-                        return true;
-                    }
-                });
     }
 
     //Structural methods
@@ -117,25 +93,6 @@ public class StepDetailsFragment extends Fragment {
             if (mThumbnailUrl.equals("")) mThumbnailUrl = mRecipe.getImage();
         }
     }
-    private void setupLayoutValues() {
-        if (mDescription!=null) mStepDescriptionTextView.setText(mDescription);
-        if (mShortDescription!=null) mStepShortDescriptionTextView.setText(mShortDescription);
-        if (mStepVideoView != null) {
-            mStepVideoView.setDefaultArtwork(BitmapFactory.decodeResource(getResources(), R.drawable.ic_missing_image));
-
-            if (mVideoUrl.equals("")) initializeVideoPlayer(mVideoUrl);
-            else setStepImage();
-        }
-    }
-
-    private void setStepImage() {
-        Uri imageUri = Uri.fromFile(new File(mThumbnailUrl));
-        Picasso.with(getContext())
-                .load(imageUri)
-                .error(R.drawable.ic_missing_image)
-                .into(mStepImageView);
-    }
-
     private void initializeVideoPlayer(String videoUrl) {
 
         if (getContext()==null) return;
@@ -163,6 +120,41 @@ public class StepDetailsFragment extends Fragment {
             mExoPlayer.release();
             mExoPlayer = null;
         }
+    }
+    private void setStepImage() {
+        Uri imageUri = Uri.fromFile(new File(mThumbnailUrl));
+        Picasso.with(getContext())
+                .load(imageUri)
+                .error(R.drawable.ic_missing_image)
+                .into(mStepImageView);
+    }
+    private void setupLayoutValues() {
+        if (mDescription!=null) mStepDescriptionTextView.setText(mDescription);
+        if (mShortDescription!=null) mStepShortDescriptionTextView.setText(mShortDescription);
+        if (mStepVideoView != null) {
+            mStepVideoView.setDefaultArtwork(BitmapFactory.decodeResource(getResources(), R.drawable.ic_missing_image));
+
+            if (mVideoUrl.equals("")) initializeVideoPlayer(mVideoUrl);
+            else setStepImage();
+        }
+    }
+    private void setupBottomNavigation() {
+
+        mBottomNavigationView.setOnNavigationItemSelectedListener(
+                new BottomNavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.action_back:
+                                mOnNavigationButtonClickHandler.onBackButtonClick(); break;
+                            case R.id.action_previous_step:
+                                mOnNavigationButtonClickHandler.onPrevStepClick(); break;
+                            case R.id.action_next_step:
+                                mOnNavigationButtonClickHandler.onNextStepClick(); break;
+                        }
+                        return true;
+                    }
+                });
     }
 
     //Functional methods

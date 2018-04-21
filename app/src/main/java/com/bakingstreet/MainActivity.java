@@ -2,7 +2,9 @@ package com.bakingstreet;
 
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,10 +14,6 @@ import android.support.v7.widget.RecyclerView;
 import com.bakingstreet.data.*;
 
 import com.bakingstreet.ui.RecipesRecycleViewAdapter;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -28,6 +26,8 @@ public class MainActivity extends AppCompatActivity implements RecipesRecycleVie
     RecipesRecycleViewAdapter mRecipesRecycleViewAdapter;
     private Parcelable mLayoutManagerSavedState;
     private Bundle mBundleRecyclerViewState;
+    private int mChosenRecipeIndex;
+    private int mStoredRecyclerViewPosition;
 
     //Lifecycle methods
     @Override protected void onCreate(Bundle savedInstanceState) {
@@ -35,53 +35,55 @@ public class MainActivity extends AppCompatActivity implements RecipesRecycleVie
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
-        //if (savedInstanceState!=null) onRestoreInstanceState(savedInstanceState);
+        //if(savedInstanceState != null) onRestoreInstanceState(savedInstanceState);
 
         mRecipesList = Statics.getRecipeListFromJson(getApplicationContext());
+        restoreChosenRecipeIndex();
         updateRecipesWithImages();
         setupRecyclerView();
         showListOfRecipesForSelection();
-        saveDataToSharedPreferences();
         updateWidgetData();
         getRecipeSelectionFromWidget();
 
     }
     @Override protected void onSaveInstanceState(Bundle outState) {
+        mStoredRecyclerViewPosition = getRecipesRecyclerViewPosition();
+        saveRecipesRecyclerViewState(outState);
         super.onSaveInstanceState(outState);
-        saveRecyclerViewState();
-        mLayoutManagerSavedState = mRecipesRecyclerView.getLayoutManager().onSaveInstanceState();
-        outState.putParcelable(Statics.SAVED_LAYOUT_MANAGER, mLayoutManagerSavedState);
 
     }
+
+    private int getRecipesRecyclerViewPosition() {
+        GridLayoutManager layoutManager = ((GridLayoutManager) mRecipesRecyclerView.getLayoutManager());
+        return layoutManager.findFirstVisibleItemPosition();
+    }
+
     @Override protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-//        if(savedInstanceState != null) {
-//
-//            mLayoutManagerSavedState = savedInstanceState.getParcelable(Statics.SAVED_LAYOUT_MANAGER);
-//
-//            RecipesRecycleViewAdapter recipesRecycleViewAdapter = (RecipesRecycleViewAdapter) mRecipesRecyclerView.getAdapter();
-//            if (recipesRecycleViewAdapter == null) {
-//
-//                mRecipesRecycleViewAdapter = new RecipesRecycleViewAdapter(this, this, mRecipesList);
-//                mRecipesRecyclerView.setAdapter(mRecipesRecycleViewAdapter);
-//            }
-//        }
+        if(savedInstanceState != null) {
+            restoreRecipesRecyclerViewState(savedInstanceState);
+        }
     }
     @Override protected void onPause() {
         super.onPause();
-//        saveRecyclerViewState();
+        //mBundleRecyclerViewState = new Bundle();
+        //saveRecipesRecyclerViewState(mBundleRecyclerViewState);
     }
     @Override protected void onResume() {
         super.onResume();
+        restoreChosenRecipeIndex();
+        //restoreRecipesRecyclerViewState(mBundleRecyclerViewState);
         showListOfRecipesForSelection();
-//        if(mBundleRecyclerViewState != null) {
-//            mLayoutManagerSavedState = mBundleRecyclerViewState.getParcelable(Statics.SAVED_LAYOUT_MANAGER);
-//        }
-//        if (mLayoutManagerSavedState != null) {
-//            mRecipesRecyclerView.getLayoutManager().onRestoreInstanceState(mLayoutManagerSavedState);
-//        } else {
-//            showListOfRecipesForSelection();
-//        }
+        getRecipeSelectionFromWidget();
+    }
+    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Statics.RECIPE_DETAILS_ACTIVITY_CODE) {
+            if(resultCode == RESULT_OK) {
+                mStoredRecyclerViewPosition = data.getIntExtra(Statics.RECIPES_RECYCLERVIEW_POSITION, 0);
+                mRecipesRecyclerView.scrollToPosition(mStoredRecyclerViewPosition);
+            }
+        }
     }
 
 
@@ -89,8 +91,7 @@ public class MainActivity extends AppCompatActivity implements RecipesRecycleVie
     private void getRecipeSelectionFromWidget() {
         String callingActivity = getIntent().getStringExtra(Statics.CALLING_ACTIVITY);
         if (callingActivity!=null && callingActivity.equals(getString(R.string.activity_name_bakinghelperwidget))) {
-            int chosenRecipeIndex = getIntent().getIntExtra(Statics.WIDGET_RECIPE_SELECTION, 0);
-            displayChosenRecipe(chosenRecipeIndex);
+            displayChosenRecipe(mChosenRecipeIndex);
         }
     }
     private void updateRecipesWithImages() {
@@ -103,7 +104,19 @@ public class MainActivity extends AppCompatActivity implements RecipesRecycleVie
     private void showListOfRecipesForSelection() {
         mRecipesRecycleViewAdapter.setContents(mRecipesList);
         mRecipesRecycleViewAdapter.notifyDataSetChanged();
-        mRecipesRecyclerView.scrollToPosition(0);
+        mRecipesRecyclerView.scrollToPosition(mStoredRecyclerViewPosition);
+    }
+    private void restoreRecipesRecyclerViewState(Bundle savedInstanceState) {
+        if(savedInstanceState != null) {
+            mLayoutManagerSavedState = savedInstanceState.getParcelable(Statics.SAVED_LAYOUT_MANAGER);
+        }
+        if (savedInstanceState != null) {
+            mRecipesRecyclerView.getLayoutManager().onRestoreInstanceState(mLayoutManagerSavedState);
+            mStoredRecyclerViewPosition = savedInstanceState.getInt(Statics.RECIPES_RECYCLERVIEW_POSITION);
+            mRecipesRecyclerView.scrollToPosition(mStoredRecyclerViewPosition);
+        } else {
+            showListOfRecipesForSelection();
+        }
     }
     private void setupRecyclerView() {
 
@@ -116,32 +129,45 @@ public class MainActivity extends AppCompatActivity implements RecipesRecycleVie
         mRecipesRecycleViewAdapter = new RecipesRecycleViewAdapter(this, this);
         mRecipesRecyclerView.setAdapter(mRecipesRecycleViewAdapter);
     }
-    private void saveRecyclerViewState() {
-//        mBundleRecyclerViewState = new Bundle();
-//        mLayoutManagerSavedState = mRecipesRecyclerView.getLayoutManager().onSaveInstanceState();
-//        mBundleRecyclerViewState.putParcelable(Statics.SAVED_LAYOUT_MANAGER, mLayoutManagerSavedState);
+    private void saveRecipesRecyclerViewState(Bundle savedInstanceState) {
+        mLayoutManagerSavedState = mRecipesRecyclerView.getLayoutManager().onSaveInstanceState();
+        savedInstanceState.putInt(Statics.RECIPES_RECYCLERVIEW_POSITION, mStoredRecyclerViewPosition);
+        savedInstanceState.putParcelable(Statics.SAVED_LAYOUT_MANAGER, mLayoutManagerSavedState);
     }
 
 
     //Functional methods
-    @Override
-    public void onRecipesListItemClick(int clickedItemIndex) {
-        displayChosenRecipe(clickedItemIndex);
-    }
     private void displayChosenRecipe(int clickedItemIndex) {
         Recipe selectedRecipe = mRecipesList.get(clickedItemIndex);
         Intent startRecipeDetailsActivityIntent = new Intent(this, RecipeDetailsActivity.class);
+
+        startRecipeDetailsActivityIntent.putExtra(Statics.RECIPES_RECYCLERVIEW_POSITION, getRecipesRecyclerViewPosition());
         startRecipeDetailsActivityIntent.putExtra(Statics.RECIPE_DETAILS_PARCEL, selectedRecipe);
         startRecipeDetailsActivityIntent.putParcelableArrayListExtra(Statics.RECIPE_INGREDIENTS_PARCEL, selectedRecipe.getIngredients());
         startRecipeDetailsActivityIntent.putParcelableArrayListExtra(Statics.RECIPE_STEPS_PARCEL, selectedRecipe.getSteps());
-        startActivity(startRecipeDetailsActivityIntent);
+        startActivityForResult(startRecipeDetailsActivityIntent, Statics.RECIPE_DETAILS_ACTIVITY_CODE);
     }
-    private void saveDataToSharedPreferences() {
+    @Override public void onRecipesListItemClick(int clickedItemIndex) {
+        saveChosenRecipeIndex(clickedItemIndex);
+        updateWidgetData();
+        displayChosenRecipe(clickedItemIndex);
+    }
+    private void restoreChosenRecipeIndex() {
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(Statics.RECIPE_PREFS, Context.MODE_PRIVATE);
+        mChosenRecipeIndex = sharedPref.getInt(Statics.CHOSEN_RECIPE_INDEX, 0);
+    }
+    private void saveChosenRecipeIndex(int clickedItemIndex) {
+        SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(Statics.RECIPE_PREFS, Context.MODE_PRIVATE);
 
+        //SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(Statics.CHOSEN_RECIPE_INDEX, clickedItemIndex);
+        editor.apply();
     }
     private void updateWidgetData() {
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
         int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, BakingHelperWidgetProvider.class));
-        BakingHelperWidgetProvider.updateBakingHelperWidgets(getApplicationContext(), appWidgetManager, appWidgetIds);
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.recipe_ingredients);
+        BakingHelperWidgetProvider.updateAppWidgets(getApplicationContext(), appWidgetManager, appWidgetIds);
     }
 }

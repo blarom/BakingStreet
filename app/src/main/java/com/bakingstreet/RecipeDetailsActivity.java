@@ -1,10 +1,12 @@
 package com.bakingstreet;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import com.bakingstreet.data.Statics;
 import com.bakingstreet.data.Recipe;
@@ -21,9 +23,9 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDe
     private String mRecipeName;
     private FragmentManager mFragmentManager;
     private int mSelectedStepIndex;
+    private int mRecipesListPosition;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_details);
 
@@ -32,9 +34,25 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDe
         mFragmentManager = getSupportFragmentManager();
 
         //Methods
-        getRecipeDetails();
+        getExtras();
         setActionBarTitle();
         if(savedInstanceState == null) setFragmentLayouts();
+    }
+    @Override public void onBackPressed() {
+        //super.onBackPressed();
+        Intent intent = new Intent();
+        intent.putExtra(Statics.RECIPES_RECYCLERVIEW_POSITION, mRecipesListPosition);
+        setResult(RESULT_OK, intent);
+        //super.onBackPressed();
+        finish();
+    }
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return false;
     }
 
     //Structural methods
@@ -61,11 +79,21 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDe
         fragmentTransaction.replace(viewId, recipeDetailsFragment);
         fragmentTransaction.commit();
     }
-    private void getRecipeDetails() {
-        mSelectedRecipe = getIntent().getParcelableExtra(Statics.RECIPE_DETAILS_PARCEL);
-        mSelectedRecipeIngredients = getIntent().getParcelableArrayListExtra(Statics.RECIPE_INGREDIENTS_PARCEL);
-        mSelectedRecipeSteps = getIntent().getParcelableArrayListExtra(Statics.RECIPE_STEPS_PARCEL);
-        mRecipeName = mSelectedRecipe.getRecipeName();
+    private void getExtras() {
+        Intent intent = getIntent();
+        if (getIntent().hasExtra(Statics.RECIPES_RECYCLERVIEW_POSITION)) {
+            mRecipesListPosition = intent.getIntExtra(Statics.RECIPES_RECYCLERVIEW_POSITION,0);
+        }
+        if (getIntent().hasExtra(Statics.RECIPE_DETAILS_PARCEL)) {
+            mSelectedRecipe = intent.getParcelableExtra(Statics.RECIPE_DETAILS_PARCEL);
+            mRecipeName = mSelectedRecipe.getRecipeName();
+        }
+        if (getIntent().hasExtra(Statics.RECIPE_INGREDIENTS_PARCEL)) {
+            mSelectedRecipeIngredients = intent.getParcelableArrayListExtra(Statics.RECIPE_INGREDIENTS_PARCEL);
+        }
+        if (getIntent().hasExtra(Statics.RECIPE_STEPS_PARCEL)) {
+            mSelectedRecipeSteps = intent.getParcelableArrayListExtra(Statics.RECIPE_STEPS_PARCEL);
+        }
     }
     private void setActionBarTitle() {
         ActionBar actionBar = getSupportActionBar();
@@ -84,24 +112,19 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDe
     }
 
     //Functional methods
-    @Override
-    public void onStepSelected(int selectedStepIndex) {
+    @Override public void onStepSelected(int selectedStepIndex) {
         mSelectedStepIndex = selectedStepIndex;
         setStepDetailsFragmentDependingOnScreenSize();
     }
-
-    @Override
-    public void onBackButtonClick() {
+    @Override public void onBackButtonClick() {
         setRecipeDetailsFragment(R.id.recipe_details_fragment_container);
     }
-    @Override
-    public void onPrevStepClick() {
+    @Override public void onPrevStepClick() {
         if (mSelectedStepIndex > 0) mSelectedStepIndex--;
         else mSelectedStepIndex = 0;
         setStepDetailsFragmentDependingOnScreenSize();
     }
-    @Override
-    public void onNextStepClick() {
+    @Override public void onNextStepClick() {
         if (mSelectedStepIndex < mSelectedRecipeSteps.size()-1) mSelectedStepIndex++;
         else mSelectedStepIndex = mSelectedRecipeSteps.size()-1;
         setStepDetailsFragmentDependingOnScreenSize();

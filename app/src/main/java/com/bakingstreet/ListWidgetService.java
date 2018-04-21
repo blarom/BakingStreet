@@ -37,52 +37,49 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
     private Context mContext;
     private List<Recipe> mRecipesList;
+    private int mRecipeIndex;
 
     ListRemoteViewsFactory(Context applicationContext) {
         mContext = applicationContext;
     }
 
     @Override public void onCreate() {
-        mRecipesList = Statics.getRecipeListFromJson(mContext);
+        getDataForList();
     }
     @Override public void onDataSetChanged() {
-        mRecipesList = Statics.getRecipeListFromJson(mContext);
+        getDataForList();
     }
     @Override public void onDestroy() {
     }
     @Override public int getCount() {
-        return mRecipesList.size();
+        return mRecipesList.get(mRecipeIndex).getIngredients().size();
     }
-
     @Override public RemoteViews getViewAt(int position) {
         RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.baking_helper_widget_list_element);
 
-        Recipe.Ingredient ingredient = mRecipesList.get(0).getIngredients().get(position);
+        Recipe.Ingredient ingredient = mRecipesList.get(mRecipeIndex).getIngredients().get(position);
         views.setTextViewText(R.id.ingredient, ingredient.getIngredient());
         views.setTextViewText(R.id.quantity, ingredient.getQuantity());
         views.setTextViewText(R.id.measure, ingredient.getMeasure());
 
         return views;
     }
-
-    @Override
-    public RemoteViews getLoadingView() {
+    @Override public RemoteViews getLoadingView() {
         return null;
     }
-
-    @Override
-    public int getViewTypeCount() {
+    @Override public int getViewTypeCount() {
         return 1; // Treat all items in the ListView the same
     }
-
-    @Override
-    public long getItemId(int i) {
+    @Override public long getItemId(int i) {
         return i;
     }
-
-    @Override
-    public boolean hasStableIds() {
+    @Override public boolean hasStableIds() {
         return true;
+    }
+
+    private void getDataForList() {
+        mRecipesList = Statics.getRecipeListFromJson(mContext);
+        mRecipeIndex = Statics.restoreChosenRecipeIndex(mContext);
     }
 }
 

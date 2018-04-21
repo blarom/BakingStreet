@@ -1,6 +1,8 @@
 package com.bakingstreet.data;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 
 import com.google.gson.Gson;
@@ -27,6 +29,11 @@ public class Statics {
     public static final String SAVED_RECIPES_LIST = "saved_recipes_list";
     public static final String WIDGET_RECIPE_SELECTION = "widget_recipe_selection";
     public static final String CALLING_ACTIVITY = "calling_activity";
+    public static final String CHOSEN_RECIPE_INDEX = "chosen_recipe_index";
+    public static final String RECIPE_PREFS = "recipe_prefs";
+    public static final String ACTION_UPDATE_WIDGET_LIST = "acton_update_widget_list";
+    public static final String RECIPES_RECYCLERVIEW_POSITION = "recipes_recycler_view_position";
+    public static final int RECIPE_DETAILS_ACTIVITY_CODE = 123;
 
     private static Map<String, String> createRecipeImagesMap() {
         Map<String,String> myMap = new HashMap<>();
@@ -62,5 +69,10 @@ public class Statics {
             return null;
         }
         return json;
+    }
+
+    public static int restoreChosenRecipeIndex(Context context) {
+        SharedPreferences sharedPref = context.getSharedPreferences(Statics.RECIPE_PREFS, Context.MODE_PRIVATE);
+        return sharedPref.getInt(Statics.CHOSEN_RECIPE_INDEX, 0);
     }
 }
