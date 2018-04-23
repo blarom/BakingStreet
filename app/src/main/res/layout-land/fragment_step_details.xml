@@ -7,45 +7,50 @@
     android:layout_height="match_parent"
     tools:context="com.bakingstreet.StepDetailsFragment">
 
-    <TextView
-        android:id="@+id/step_short_description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/fragment_step_details_title_marginTop"
-        android:gravity="center_horizontal"
-        android:text="@string/default_text"
-        android:textSize="@dimen/fragment_step_details_title_textSize"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone"/>
-
-    <com.google.android.exoplayer2.ui.SimpleExoPlayerView
-        android:id="@+id/step_video"
+    <LinearLayout
+        android:id="@+id/media_frame"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:src="@drawable/ic_missing_image"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/step_short_description"/>
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/step_description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="64dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:text="@string/default_text"
-        android:textAlignment="center"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/bottom_navigation"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        android:visibility="gone"/>
+        <TextView
+            android:id="@+id/step_short_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"/>
+
+        <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+            android:id="@+id/step_video"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible"
+            app:srcCompat="@drawable/ic_missing_image">
+
+        </com.google.android.exoplayer2.ui.SimpleExoPlayerView>
+
+        <com.santalu.aspectratioimageview.AspectRatioImageView
+            android:id="@+id/step_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="@string/recipe_image"
+            android:scaleType="centerCrop"
+            android:visibility="gone"
+            app:ari_aspect="height"
+            app:ari_ratio="0.75"
+            app:srcCompat="@drawable/ic_missing_image"/>
+
+        <TextView
+            android:id="@+id/step_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            />
+
+    </LinearLayout>
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottom_navigation"

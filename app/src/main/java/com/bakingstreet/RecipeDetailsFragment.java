@@ -11,13 +11,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ScrollView;
+import android.widget.LinearLayout;
 
 import com.bakingstreet.data.Statics;
 import com.bakingstreet.data.Recipe;
 import com.bakingstreet.ui.IngredientsRecycleViewAdapter;
 import com.bakingstreet.ui.StepsRecycleViewAdapter;
+import com.santalu.aspectratioimageview.AspectRatioImageView;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -29,10 +29,9 @@ import butterknife.ButterKnife;
 public class RecipeDetailsFragment extends Fragment implements StepsRecycleViewAdapter.StepsListItemClickHandler {
 
     private Recipe mSelectedRecipe;
-    @BindView(R.id.recipe_details_fragment_container) ScrollView mRecipeDetailsFragmentContainer;
+    @BindView(R.id.recipe_details_fragment_container) LinearLayout mRecipeDetailsFragmentContainer;
     @BindView(R.id.recipe_ingredients_recycler_view) RecyclerView mIngredientsRecyclerView;
     @BindView(R.id.recipe_steps_recycler_view) RecyclerView mStepsRecyclerView;
-    @BindView(R.id.recipe_image) ImageView mRecipeImageView;
     private List<Recipe.Ingredient> mIngredients;
     private List<Recipe.Step> mSteps;
     private String mImageString;
@@ -56,7 +55,6 @@ public class RecipeDetailsFragment extends Fragment implements StepsRecycleViewA
 
         //Methods
         getRecipeDetails();
-        setupLayoutValues();
         setupListOfIngredients();
         setupListOfSteps();
 
@@ -81,39 +79,6 @@ public class RecipeDetailsFragment extends Fragment implements StepsRecycleViewA
             mImageString = mSelectedRecipe.getImage();
             mRecipeName = mSelectedRecipe.getRecipeName();
             mServings = mSelectedRecipe.getServings();
-        }
-    }
-    private void setupLayoutValues() {
-        if (mImageString!=null) {
-            Uri imageUri = Uri.fromFile(new File(mImageString));
-//            Picasso.with(getContext())
-//                    .load(imageUri)
-//                    .error(R.drawable.ic_missing_image)
-//                    .into(mRecipeImageView);
-
-            Picasso.with(getContext())
-                    .load(imageUri)
-                    .error(R.drawable.ic_missing_image)
-                    .into(mRecipeImageView, new com.squareup.picasso.Callback() {
-                        @Override
-                        public void onSuccess() {
-                            //Adapted from github\blarom\PopularMovies
-                            Drawable drawable = mRecipeImageView.getDrawable();
-                            int drawableWidth = drawable.getIntrinsicWidth();
-                            int drawableHeight = drawable.getIntrinsicHeight();
-
-                            int containerWidth = mRecipeDetailsFragmentContainer.getWidth();
-
-                            //Set the imageView container height to match the image dimensions
-                            int maxImageViewHeight = (int) (((float) drawableHeight) / ((float) drawableWidth) * ((float) containerWidth));
-                            mRecipeImageView.setMaxHeight(maxImageViewHeight);
-                            mRecipeImageView.requestLayout();
-                        }
-
-                        @Override
-                        public void onError() {
-                        }
-                    });
         }
     }
     private void setupListOfIngredients() {

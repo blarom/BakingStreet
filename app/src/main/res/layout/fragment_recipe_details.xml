@@ -1,42 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<LinearLayout
     android:id="@+id/recipe_details_fragment_container"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:gravity="start"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.bakingstreet.RecipeDetailsFragment">
 
-    <LinearLayout
-        android:id="@+id/details_linear_container"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recipe_ingredients_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="start"
-        android:orientation="vertical">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="8dp"/>
 
-        <ImageView
-            android:id="@+id/recipe_image"
-            android:layout_marginTop="8dp"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:adjustViewBounds="true"
-            android:contentDescription="@string/recipe_image"
-            android:scaleType="fitCenter"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recipe_steps_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:layout_marginTop="8dp"/>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recipe_ingredients_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"/>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recipe_steps_recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"/>
-
-    </LinearLayout>
-
-</ScrollView>
+</LinearLayout>

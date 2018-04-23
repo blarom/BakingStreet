@@ -17,49 +17,57 @@
         android:textSize="@dimen/fragment_step_details_title_textSize"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <com.google.android.exoplayer2.ui.SimpleExoPlayerView
-        android:id="@+id/step_video"
+    <FrameLayout
+        android:id="@+id/media_frame"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="64dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        app:srcCompat="@drawable/ic_missing_image"
-        app:layout_constraintBottom_toTopOf="@+id/step_description"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:visibility="visible"
-        app:layout_constraintTop_toBottomOf="@+id/step_short_description"/>
+        android:gravity="center_vertical"
+        android:orientation="vertical">
 
-    <com.santalu.aspectratioimageview.AspectRatioImageView
-        android:id="@+id/step_image"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scaleType="centerCrop"
-        app:ari_aspect="height"
-        app:ari_ratio="0.75"
-        app:layout_constraintBottom_toTopOf="@+id/step_description"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:contentDescription="@string/recipe_image"
-        app:srcCompat="@drawable/ic_missing_image"
-        android:visibility="gone"/>
+        <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+            android:id="@+id/step_video"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="visible"
+            app:resize_mode="fixed_width"
+            app:srcCompat="@drawable/ic_missing_image">
+
+        </com.google.android.exoplayer2.ui.SimpleExoPlayerView>
+
+        <com.santalu.aspectratioimageview.AspectRatioImageView
+            android:id="@+id/step_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:contentDescription="@string/recipe_image"
+            android:scaleType="centerCrop"
+            android:visibility="gone"
+            app:ari_aspect="height"
+            app:ari_ratio="0.75"
+            app:srcCompat="@drawable/ic_missing_image"/>
+
+    </FrameLayout>
 
     <TextView
         android:id="@+id/step_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="64dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:text="@string/default_text"
         android:textAlignment="center"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/bottom_navigation"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"/>
+        />
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottom_navigation"

@@ -15,7 +15,10 @@ import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 
-public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDetailsFragment.OnStepSelectedListener, StepDetailsFragment.NavigationButtonClickHandler {
+public class RecipeDetailsActivity extends AppCompatActivity implements
+        RecipeDetailsFragment.OnStepSelectedListener,
+        StepDetailsFragment.NavigationButtonClickHandler,
+        StepDetailsFragment.OnPlayerButtonClickListener{
 
     private Recipe mSelectedRecipe;
     private ArrayList<Recipe.Ingredient> mSelectedRecipeIngredients;
@@ -114,22 +117,34 @@ public class RecipeDetailsActivity extends AppCompatActivity implements RecipeDe
     //Functional methods
     @Override public void onStepSelected(int selectedStepIndex) {
         mSelectedStepIndex = selectedStepIndex;
-        setStepDetailsFragmentDependingOnScreenSize();
+        loadStepDetailsFragmentDependingOnScreenSize();
     }
     @Override public void onBackButtonClick() {
         setRecipeDetailsFragment(R.id.recipe_details_fragment_container);
     }
     @Override public void onPrevStepClick() {
-        if (mSelectedStepIndex > 0) mSelectedStepIndex--;
-        else mSelectedStepIndex = 0;
-        setStepDetailsFragmentDependingOnScreenSize();
+        loadPreviousStepFragment();
     }
     @Override public void onNextStepClick() {
+        loadNextStepFragment();
+    }
+    @Override public void onSkipToPreviousClicked() {
+        loadPreviousStepFragment();
+    }
+    @Override public void onSkipToNextClicked() {
+        loadNextStepFragment();
+    }
+    private void loadPreviousStepFragment() {
+        if (mSelectedStepIndex > 0) mSelectedStepIndex--;
+        else mSelectedStepIndex = 0;
+        loadStepDetailsFragmentDependingOnScreenSize();
+    }
+    private void loadNextStepFragment() {
         if (mSelectedStepIndex < mSelectedRecipeSteps.size()-1) mSelectedStepIndex++;
         else mSelectedStepIndex = mSelectedRecipeSteps.size()-1;
-        setStepDetailsFragmentDependingOnScreenSize();
+        loadStepDetailsFragmentDependingOnScreenSize();
     }
-    private void setStepDetailsFragmentDependingOnScreenSize() {
+    private void loadStepDetailsFragmentDependingOnScreenSize() {
         if (Statics.getSmallestWidth(getApplicationContext()) < Statics.TABLET_SMALLEST_WIDTH_THRESHOLD) {
             setStepDetailsFragment(R.id.recipe_details_fragment_container, mSelectedStepIndex);
         } else {
