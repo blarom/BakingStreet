@@ -247,14 +247,14 @@ public class StepDetailsFragment extends Fragment implements ExoPlayer.EventList
 
     }
     @Override public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-        if (playbackState == PlaybackStateCompat.ACTION_SKIP_TO_NEXT) {
+        if (playbackState == PlaybackStateCompat.STATE_SKIPPING_TO_PREVIOUS) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 mStateBuilder.setState(PlaybackState.STATE_SKIPPING_TO_PREVIOUS, mExoPlayer.getCurrentPosition(), 1f);
                 mMediaSession.setPlaybackState(mStateBuilder.build());
             }
             skipToPreviousRecipeStep();
         }
-        if (playbackState == PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS) {
+        if (playbackState == PlaybackStateCompat.STATE_SKIPPING_TO_NEXT) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 mStateBuilder.setState(PlaybackState.STATE_SKIPPING_TO_NEXT, mExoPlayer.getCurrentPosition(), 1f);
                 mMediaSession.setPlaybackState(mStateBuilder.build());
@@ -295,7 +295,6 @@ public class StepDetailsFragment extends Fragment implements ExoPlayer.EventList
         NetworkInfo activeNetworkInfo = connMgr.getActiveNetworkInfo();
         return (activeNetworkInfo != null) ? true : false;
     }
-
     private class StepVideoSessionCallback extends MediaSessionCompat.Callback {
         @Override public void onPlay() {
             super.onPlay();
