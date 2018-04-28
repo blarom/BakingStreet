@@ -26,6 +26,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
     private int mSelectedStepIndex;
     private int mRecipesListPosition;
     private RecipeDetailsFragment mRecipeDetailsFragment;
+    private StepDetailsFragment mRecipeStepsFragment;
 
     //Lifecycle methods
     @Override protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +64,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
     @Override protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         mSelectedStepIndex = savedInstanceState.getInt(Statics.SELECTED_STEP_INDEX);
+        setFragmentLayouts();
     }
 
     //Structural methods
@@ -80,7 +82,7 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
         fragmentTransaction.commit();
     }
     private void setStepDetailsFragment(int viewId, int selectedStepIndex) {
-        StepDetailsFragment recipeDetailsFragment = new StepDetailsFragment();
+        mRecipeStepsFragment = new StepDetailsFragment();
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
 
         Bundle bundle = new Bundle();
@@ -88,8 +90,8 @@ public class RecipeDetailsActivity extends AppCompatActivity implements
         bundle.putParcelable(Statics.RECIPE_DETAILS_PARCEL, mSelectedRecipe);
         bundle.putInt(Statics.CURRENT_RECIPE_STEP_INDEX, mSelectedStepIndex);
         bundle.putInt(Statics.CURRENT_RECIPE_STEP_COUNT, mSelectedRecipeSteps.size());
-        recipeDetailsFragment.setArguments(bundle);
-        fragmentTransaction.replace(viewId, recipeDetailsFragment);
+        mRecipeStepsFragment.setArguments(bundle);
+        fragmentTransaction.replace(viewId, mRecipeStepsFragment);
         fragmentTransaction.commit();
     }
     private void getExtras() {
