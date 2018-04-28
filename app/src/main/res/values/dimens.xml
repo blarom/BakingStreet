@@ -12,4 +12,14 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     -->
     <dimen name="widget_margin">8dp</dimen>
     <dimen name="widget_title_padding">8dp</dimen>
+    <dimen name="recipe_step_textSize">16sp</dimen>
+    <dimen name="widget_textSize">16sp</dimen>
+    <dimen name="widget_textView_margins">8dp</dimen>
+    <dimen name="recipe_details_fragment_titles_textSize">20sp</dimen>
+    <dimen name="recipe_details_fragment_element_margin">8dp</dimen>
+    <dimen name="recipe_step_details_margin">8dp</dimen>
+    <dimen name="recipe_step_details_description_textSize">16sp</dimen>
+    <dimen name="ingredients_list_item_element_margin">8dp</dimen>
+    <dimen name="steps_list_item_margin">8dp</dimen>
+    <dimen name="steps_list_item_padding">4dp</dimen>
 </resources>

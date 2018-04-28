@@ -11,10 +11,13 @@
         android:id="@+id/short_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:paddingTop="@dimen/steps_list_item_padding"
+        android:paddingBottom="@dimen/steps_list_item_padding"
+        android:layout_marginStart="@dimen/steps_list_item_margin"
+        android:layout_marginLeft="@dimen/steps_list_item_margin"
+        android:textSize="@dimen/recipe_step_textSize"
         android:gravity="start"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>

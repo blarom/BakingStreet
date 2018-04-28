@@ -34,6 +34,9 @@ public class Statics {
     public static final String ACTION_UPDATE_WIDGET_LIST = "acton_update_widget_list";
     public static final String RECIPES_RECYCLERVIEW_POSITION = "recipes_recycler_view_position";
     public static final int RECIPE_DETAILS_ACTIVITY_CODE = 123;
+    public static final String CURRENT_RECIPE_STEP_INDEX = "current_recipe_step_index";
+    public static final String CURRENT_RECIPE_STEP_COUNT = "current_recipe_step_number";
+    public static final String SELECTED_STEP_INDEX = "selected_step_index";
 
     private static Map<String, String> createRecipeImagesMap() {
         Map<String,String> myMap = new HashMap<>();
@@ -43,7 +46,6 @@ public class Statics {
         myMap.put("Cheesecake", "cheesecake.jpg");
         return myMap;
     }
-    public static final int TABLET_SMALLEST_WIDTH_THRESHOLD = 600;
     public static int getSmallestWidth(Context context) {
         Configuration config = context.getResources().getConfiguration();
         return config.smallestScreenWidthDp;

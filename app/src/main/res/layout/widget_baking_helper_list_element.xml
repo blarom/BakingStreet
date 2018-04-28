@@ -9,30 +9,30 @@
         android:id="@+id/quantity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="@dimen/widget_textView_margins"
+        android:layout_marginTop="@dimen/widget_textView_margins"
         android:gravity="start"
         android:text="@string/default_text"
-        android:layout_marginLeft="8dp"/>
+        android:layout_marginLeft="@dimen/widget_textView_margins"/>
 
     <TextView
         android:id="@+id/measure"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="@dimen/widget_textView_margins"
+        android:layout_marginTop="@dimen/widget_textView_margins"
         android:gravity="start"
         android:text="@string/default_text"
-        android:layout_marginLeft="8dp"/>
+        android:layout_marginLeft="@dimen/widget_textView_margins"/>
 
     <TextView
         android:id="@+id/ingredient"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="@dimen/widget_textView_margins"
+        android:layout_marginTop="@dimen/widget_textView_margins"
         android:gravity="start"
         android:text="@string/default_text"
-        android:layout_marginLeft="8dp"/>
+        android:layout_marginLeft="@dimen/widget_textView_margins"/>
 
 </LinearLayout>

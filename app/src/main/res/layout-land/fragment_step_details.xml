@@ -11,11 +11,7 @@
         android:id="@+id/media_frame"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/step_short_description"
@@ -63,6 +59,7 @@
         app:itemBackground="@color/colorPrimary"
         app:itemIconTint="@drawable/navigation_bar_color_state_selector"
         app:itemTextColor="@drawable/navigation_bar_color_state_selector"
-        app:menu="@menu/recipe_steps_bottom_navigation_menu"/>
+        app:menu="@menu/menu_recipe_steps_bottom_navigation"
+        android:visibility="gone"/>
 
 </android.support.constraint.ConstraintLayout>

@@ -35,7 +35,7 @@
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/baking_helper_widget_info"/>
+                android:resource="@xml/widget_info_baking_helper"/>
         </receiver>
 
         <service

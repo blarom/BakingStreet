@@ -1,5 +1,6 @@
 package com.bakingstreet;
 
+import com.bakingstreet.data.*;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -8,24 +9,20 @@ import android.content.SharedPreferences;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-
-import com.bakingstreet.data.*;
-
+import android.support.v7.widget.GridLayoutManager;
 import com.bakingstreet.ui.RecipesRecycleViewAdapter;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements RecipesRecycleViewAdapter.RecipesListItemClickHandler {
+public class MainActivity extends AppCompatActivity implements
+        RecipesRecycleViewAdapter.RecipesListItemClickHandler {
 
     @BindView(R.id.recipes_recycler_view) RecyclerView mRecipesRecyclerView;
     List<Recipe> mRecipesList;
     RecipesRecycleViewAdapter mRecipesRecycleViewAdapter;
     private Parcelable mLayoutManagerSavedState;
-    private Bundle mBundleRecyclerViewState;
     private int mChosenRecipeIndex;
     private int mStoredRecyclerViewPosition;
 
@@ -35,7 +32,6 @@ public class MainActivity extends AppCompatActivity implements RecipesRecycleVie
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
-        //if(savedInstanceState != null) onRestoreInstanceState(savedInstanceState);
 
         mRecipesList = Statics.getRecipeListFromJson(getApplicationContext());
         restoreChosenRecipeIndex();
@@ -52,27 +48,15 @@ public class MainActivity extends AppCompatActivity implements RecipesRecycleVie
         super.onSaveInstanceState(outState);
 
     }
-
-    private int getRecipesRecyclerViewPosition() {
-        GridLayoutManager layoutManager = ((GridLayoutManager) mRecipesRecyclerView.getLayoutManager());
-        return layoutManager.findFirstVisibleItemPosition();
-    }
-
     @Override protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         if(savedInstanceState != null) {
             restoreRecipesRecyclerViewState(savedInstanceState);
         }
     }
-    @Override protected void onPause() {
-        super.onPause();
-        //mBundleRecyclerViewState = new Bundle();
-        //saveRecipesRecyclerViewState(mBundleRecyclerViewState);
-    }
     @Override protected void onResume() {
         super.onResume();
         restoreChosenRecipeIndex();
-        //restoreRecipesRecyclerViewState(mBundleRecyclerViewState);
         showListOfRecipesForSelection();
         getRecipeSelectionFromWidget();
     }
@@ -85,7 +69,6 @@ public class MainActivity extends AppCompatActivity implements RecipesRecycleVie
             }
         }
     }
-
 
     //Structural methods
     private void getRecipeSelectionFromWidget() {
@@ -121,9 +104,9 @@ public class MainActivity extends AppCompatActivity implements RecipesRecycleVie
     private void setupRecyclerView() {
 
         int numberOfColumns;
-        if (Statics.getSmallestWidth(getApplicationContext()) < Statics.TABLET_SMALLEST_WIDTH_THRESHOLD) {
-            numberOfColumns = Statics.NUMBER_GRIDLAYOUT_COLUMNS_PHONE;
-        } else numberOfColumns = Statics.NUMBER_GRIDLAYOUT_COLUMNS_TABLET;
+        if (Statics.getSmallestWidth(getApplicationContext()) < getResources().getInteger(R.integer.tablet_smallest_width_threshold)) {
+            numberOfColumns = getResources().getInteger(R.integer.number_gridlayout_columns_phone);
+        } else numberOfColumns = getResources().getInteger(R.integer.number_gridlayout_columns_tablet);
 
         mRecipesRecyclerView.setLayoutManager(new GridLayoutManager(this, numberOfColumns));
         mRecipesRecycleViewAdapter = new RecipesRecycleViewAdapter(this, this);
@@ -134,7 +117,6 @@ public class MainActivity extends AppCompatActivity implements RecipesRecycleVie
         savedInstanceState.putInt(Statics.RECIPES_RECYCLERVIEW_POSITION, mStoredRecyclerViewPosition);
         savedInstanceState.putParcelable(Statics.SAVED_LAYOUT_MANAGER, mLayoutManagerSavedState);
     }
-
 
     //Functional methods
     private void displayChosenRecipe(int clickedItemIndex) {
@@ -147,10 +129,9 @@ public class MainActivity extends AppCompatActivity implements RecipesRecycleVie
         startRecipeDetailsActivityIntent.putParcelableArrayListExtra(Statics.RECIPE_STEPS_PARCEL, selectedRecipe.getSteps());
         startActivityForResult(startRecipeDetailsActivityIntent, Statics.RECIPE_DETAILS_ACTIVITY_CODE);
     }
-    @Override public void onRecipesListItemClick(int clickedItemIndex) {
-        saveChosenRecipeIndex(clickedItemIndex);
-        updateWidgetData();
-        displayChosenRecipe(clickedItemIndex);
+    private int getRecipesRecyclerViewPosition() {
+        GridLayoutManager layoutManager = ((GridLayoutManager) mRecipesRecyclerView.getLayoutManager());
+        return layoutManager.findFirstVisibleItemPosition();
     }
     private void restoreChosenRecipeIndex() {
         SharedPreferences sharedPref = getApplicationContext().getSharedPreferences(Statics.RECIPE_PREFS, Context.MODE_PRIVATE);
@@ -170,4 +151,12 @@ public class MainActivity extends AppCompatActivity implements RecipesRecycleVie
         appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.recipe_ingredients);
         BakingHelperWidgetProvider.updateAppWidgets(getApplicationContext(), appWidgetManager, appWidgetIds);
     }
+
+    //Communication with other activites/fragments
+    @Override public void onRecipesListItemClick(int clickedItemIndex) {
+        saveChosenRecipeIndex(clickedItemIndex);
+        updateWidgetData();
+        displayChosenRecipe(clickedItemIndex);
+    }
+
 }

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="tablet_smallest_width_threshold">600</integer>
+    <integer name="prev_button_min_time_to_double_click_function_change">2000</integer>
+    <integer name="number_gridlayout_columns_phone">1</integer>
+    <integer name="number_gridlayout_columns_tablet">3</integer>
+</resources>

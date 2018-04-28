@@ -22,7 +22,7 @@ public class BakingHelperWidgetProvider extends AppWidgetProvider {
     }
     private static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
 
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.baking_helper_widget);
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_baking_helper);
 
         updateWidgetIngredientsList(context, views);
         int recipeIndex = Statics.restoreChosenRecipeIndex(context);

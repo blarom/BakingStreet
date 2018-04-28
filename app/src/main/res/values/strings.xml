@@ -2,9 +2,6 @@
     <string name="app_name">BakingStreet</string>
     <string name="recipe_image">image</string>
     <string name="default_text">default</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="back_to_details">Recipe</string>
     <string name="previous_step">Prev. Step</string>
     <string name="next_step">Next Step</string>
@@ -12,4 +9,9 @@
     <string name="add_widget">Add widget</string>
     <string name="activity_name_bakinghelperwidget">BakingHelperWidget</string>
     <string name="no_recipes_available">No Recipes Available!</string>
+    <string name="loading_video">Loading Video…</string>
+    <string name="test_title_text1">Yellow Cake</string>
+    <string name="test_title_text2">Nutella Pie</string>
+    <string name="recipe_details_fragment_ingredients">Ingredients</string>
+    <string name="recipe_details_fragment_steps">Recipe Steps</string>
 </resources>

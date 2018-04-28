@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="RecipeDetailsFragmentElementTheme">
+        <item name="android:layout_marginTop">@dimen/recipe_details_fragment_element_margin</item>
+        <item name="android:layout_marginStart">@dimen/recipe_details_fragment_element_margin</item>
+        <item name="android:layout_marginLeft">@dimen/recipe_details_fragment_element_margin</item>
+        <item name="android:layout_marginEnd">@dimen/recipe_details_fragment_element_margin</item>
+        <item name="android:layout_marginRight">@dimen/recipe_details_fragment_element_margin</item>
+
+    </style>
+</resources>

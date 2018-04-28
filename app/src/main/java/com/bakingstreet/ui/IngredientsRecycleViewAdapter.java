@@ -31,7 +31,7 @@ public class IngredientsRecycleViewAdapter extends RecyclerView.Adapter<Ingredie
     @Override
     public IngredientViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        View view = inflater.inflate(R.layout.ingredients_list_item, parent, false);
+        View view = inflater.inflate(R.layout.list_item_ingredients, parent, false);
         view.setFocusable(true);
         return new IngredientViewHolder(view);
     }

@@ -12,18 +12,18 @@
         android:id="@+id/ingredient"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="@dimen/ingredients_list_item_element_margin"
+        android:layout_marginLeft="@dimen/ingredients_list_item_element_margin"
+        android:layout_marginTop="@dimen/ingredients_list_item_element_margin"
         android:gravity="center_horizontal"
         android:text="@string/default_text"
         app:layout_constraintStart_toStartOf="@+id/guideline_ingredient"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginLeft="8dp"/>
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline_ingredient"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.2"
+        app:layout_constraintGuide_percent="0.25"
         android:layout_width="1dp"
         android:layout_height="match_parent"
         />
@@ -32,25 +32,25 @@
         android:id="@+id/quantity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="@dimen/ingredients_list_item_element_margin"
+        android:layout_marginLeft="@dimen/ingredients_list_item_element_margin"
+        android:layout_marginTop="@dimen/ingredients_list_item_element_margin"
         android:gravity="center_horizontal"
         android:text="@string/default_text"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginLeft="8dp"/>
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
         android:id="@+id/measure"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="@dimen/ingredients_list_item_element_margin"
+        android:layout_marginLeft="@dimen/ingredients_list_item_element_margin"
+        android:layout_marginTop="@dimen/ingredients_list_item_element_margin"
         android:gravity="center_horizontal"
         android:text="@string/default_text"
         app:layout_constraintStart_toEndOf="@+id/quantity"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginLeft="8dp"/>
+        app:layout_constraintTop_toTopOf="parent"/>
 
 
 </android.support.constraint.ConstraintLayout>

@@ -55,7 +55,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
         return mRecipesList.get(mRecipeIndex).getIngredients().size();
     }
     @Override public RemoteViews getViewAt(int position) {
-        RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.baking_helper_widget_list_element);
+        RemoteViews views = new RemoteViews(mContext.getPackageName(), R.layout.widget_baking_helper_list_element);
 
         Recipe.Ingredient ingredient = mRecipesList.get(mRecipeIndex).getIngredients().get(position);
         views.setTextViewText(R.id.ingredient, ingredient.getIngredient());

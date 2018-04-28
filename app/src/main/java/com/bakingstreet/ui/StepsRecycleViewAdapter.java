@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ public class StepsRecycleViewAdapter extends RecyclerView.Adapter<StepsRecycleVi
     private Context mContext;
     final private StepsListItemClickHandler mOnClickHandler;
     private List<Recipe.Step> mSteps;
+    private int mSelectedStepIndex;
 
     public StepsRecycleViewAdapter(Context context, StepsListItemClickHandler listener, List<Recipe.Step> steps) {
         this.mContext = context;
@@ -29,36 +31,21 @@ public class StepsRecycleViewAdapter extends RecyclerView.Adapter<StepsRecycleVi
         this.mSteps = steps;
     }
 
-    @NonNull
-    @Override
-    public StepsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    //Adapter methods
+    @NonNull @Override public StepsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        View view = inflater.inflate(R.layout.steps_list_item, parent, false);
+        View view = inflater.inflate(R.layout.list_item_steps, parent, false);
         view.setFocusable(true);
         return new StepsViewHolder(view);
     }
-
-    @Override
-    public void onBindViewHolder(@NonNull StepsViewHolder holder, int position) {
+    @Override public void onBindViewHolder(@NonNull StepsViewHolder holder, int position) {
 
         updateStep(holder, position);
     }
-    private void updateStep(StepsViewHolder holder, int position) {
-        TextView stepShortDescriptionTV = holder.stepsInRecycleView;
-        stepShortDescriptionTV.setText(mSteps.get(position).getShortDescription());
-    }
-
-    @Override
-    public int getItemCount() {
+    @Override public int getItemCount() {
         if (mSteps == null) return 0;
         else return mSteps.size();
     }
-
-    public void setContents(List<Recipe.Step> steps) {
-        if (steps != null) mSteps = steps;
-        if (mSteps != null) this.notifyDataSetChanged();
-    }
-
     class StepsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @BindView(R.id.short_description) TextView stepsInRecycleView;
@@ -78,6 +65,30 @@ public class StepsRecycleViewAdapter extends RecyclerView.Adapter<StepsRecycleVi
         }
     }
 
+    //User-created methods
+    private void updateStep(StepsViewHolder holder, int position) {
+        TextView stepShortDescriptionTV = holder.stepsInRecycleView;
+        stepShortDescriptionTV.setText(mSteps.get(position).getShortDescription());
+        if (position==mSelectedStepIndex) {
+            holder.container.setBackgroundColor(mContext.getResources().getColor(R.color.selected_item_background_color));
+        }
+        else {
+            //Use the default android background color
+            TypedValue typedValue = new TypedValue();
+            mContext.getTheme().resolveAttribute(android.R.attr.windowBackground, typedValue, true);
+            holder.container.setBackgroundColor(typedValue.data);
+        }
+    }
+    public void setContents(List<Recipe.Step> steps) {
+        if (steps != null) mSteps = steps;
+        if (mSteps != null) this.notifyDataSetChanged();
+    }
+    public void setSelectedStep(int selectedStepIndex) {
+        if (mSelectedStepIndex != selectedStepIndex) {
+            mSelectedStepIndex = selectedStepIndex;
+            this.notifyDataSetChanged();
+        }
+    }
     public interface StepsListItemClickHandler {
         void onStepsListItemClick(int clickedItemIndex);
     }

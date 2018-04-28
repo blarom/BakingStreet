@@ -1,7 +1,6 @@
 package com.bakingstreet.ui;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -38,7 +37,7 @@ public class RecipesRecycleViewAdapter extends RecyclerView.Adapter<RecipesRecyc
     @Override
     public RecipeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        View view = inflater.inflate(R.layout.recipes_list_item, parent, false);
+        View view = inflater.inflate(R.layout.list_item_recipes, parent, false);
         view.setFocusable(true);
         return new RecipeViewHolder(view);
     }

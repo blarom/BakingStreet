@@ -18,24 +18,25 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <FrameLayout
+        android:id="@+id/media_frame"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/step_description"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/step_short_description">
+        app:layout_constraintTop_toBottomOf="@id/step_short_description"
+        app:layout_constraintBottom_toTopOf="@id/step_description"
+        android:layout_marginBottom="@dimen/recipe_step_details_margin"
+        android:layout_marginEnd="@dimen/recipe_step_details_margin"
+        android:layout_marginStart="@dimen/recipe_step_details_margin"
+        android:layout_marginTop="@dimen/recipe_step_details_margin"
+        android:gravity="center"
+        android:orientation="vertical">
 
         <com.google.android.exoplayer2.ui.SimpleExoPlayerView
             android:id="@+id/step_video"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:minHeight="500dp"
-            app:resize_mode="fill"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:visibility="visible"
+            app:resize_mode="fixed_width"
             app:srcCompat="@drawable/ic_missing_image">
 
         </com.google.android.exoplayer2.ui.SimpleExoPlayerView>
@@ -44,28 +45,30 @@
             android:id="@+id/step_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_gravity="center"
             android:contentDescription="@string/recipe_image"
-            android:scaleType="centerCrop"
+            android:scaleType="centerInside"
             android:visibility="gone"
             app:ari_aspect="height"
             app:ari_ratio="0.75"
             app:srcCompat="@drawable/ic_missing_image"/>
+
     </FrameLayout>
 
     <TextView
         android:id="@+id/step_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:text="@string/default_text"
-        android:textAlignment="center"
-        android:textSize="16sp"
+        android:layout_marginTop="@dimen/recipe_step_details_margin"
+        android:layout_marginBottom="@dimen/recipe_step_details_margin"
+        android:layout_marginEnd="@dimen/recipe_step_details_margin"
+        android:layout_marginStart="@dimen/recipe_step_details_margin"
         app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/default_text"
+        android:textAlignment="center"
+        android:textSize="@dimen/recipe_step_details_description_textSize"
         />
 
     <android.support.design.widget.BottomNavigationView
@@ -79,6 +82,6 @@
         app:itemBackground="@color/colorPrimary"
         app:itemIconTint="@drawable/navigation_bar_color_state_selector"
         app:itemTextColor="@drawable/navigation_bar_color_state_selector"
-        app:menu="@menu/recipe_steps_bottom_navigation_menu"/>
+        app:menu="@menu/menu_recipe_steps_bottom_navigation"/>
 
 </android.support.constraint.ConstraintLayout>

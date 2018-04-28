@@ -2,7 +2,7 @@
               xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@color/colorPrimary"
+              android:background="@color/colorPrimaryLight"
               android:padding="@dimen/widget_margin"
               android:orientation="vertical">
 
@@ -13,7 +13,7 @@
         android:padding="@dimen/widget_title_padding"
         android:text="@string/default_text"
         android:textAlignment="center"
-        android:textSize="16sp">
+        android:textSize="@dimen/widget_textSize">
     </TextView>
 
     <ListView
